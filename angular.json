@@ -97,8 +97,18 @@
             ],
             "scripts": []
           }
+        },
+        "deploy": {
+          "builder": "@angular/fire:deploy",
+          "options": {
+            "version": 2,
+            "browserTarget": "clinica-online:build:production"
+          }
         }
       }
     }
+  },
+  "cli": {
+    "analytics": "25bd43a2-a4e7-4c37-bfc9-b1822779e6b8"
   }
 }
