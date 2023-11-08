@@ -1,1 +1,24 @@
 /* You can add global styles to this file, and also import other style files */
+a {
+  text-decoration: none;
+}
+
+/* Add underline back when hovering over links */
+a:hover {
+  text-decoration: none;
+}
+
+/* Hide vertical scrollbar */
+::-webkit-scrollbar {
+  width: 0.5em;
+}
+
+/* Hide scrollbar track */
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+/* Hide scrollbar handle */
+::-webkit-scrollbar-thumb {
+  background: transparent;
+}

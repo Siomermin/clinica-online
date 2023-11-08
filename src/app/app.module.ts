@@ -7,6 +7,8 @@ import { initializeApp, provideFirebaseApp } from '@angular/fire/app';
 import { getAuth, provideAuth } from '@angular/fire/auth';
 import { getFirestore, provideFirestore } from '@angular/fire/firestore';
 import { AngularFireModule } from '@angular/fire/compat';
+import { CoreModule } from 'src/app/core/core.module';
+
 
 const firebaseConfig = {
   apiKey: "AIzaSyAv0lL-0aMDKB7VUkC9o1yDVox55dYA7QI",
@@ -20,9 +22,10 @@ const firebaseConfig = {
 
 @NgModule({
   declarations: [
-    AppComponent
+    AppComponent,
   ],
   imports: [
+    CoreModule,
     BrowserModule,
     AppRoutingModule,
     AngularFireModule.initializeApp(firebaseConfig),
