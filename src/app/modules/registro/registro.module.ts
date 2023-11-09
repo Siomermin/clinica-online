@@ -17,8 +17,7 @@ import { FormEspecialistaComponent } from './components/form-especialista/form-e
   imports: [
     CommonModule,
     RegistroRoutingModule,
-    ReactiveFormsModule ,
-
+    ReactiveFormsModule,
   ]
 })
 export class RegistroModule { }

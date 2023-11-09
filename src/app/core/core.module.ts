@@ -4,17 +4,16 @@ import { NavbarComponent } from './components/navbar/navbar.component';
 import { BienvenidaComponent } from './pages/bienvenida/bienvenida.component';
 
 
-
 @NgModule({
   declarations: [
     BienvenidaComponent,
-    NavbarComponent
+    NavbarComponent,
   ],
   imports: [
     CommonModule,
   ],
   exports: [
-    NavbarComponent
+    NavbarComponent,
   ],
 })
 export class CoreModule { }

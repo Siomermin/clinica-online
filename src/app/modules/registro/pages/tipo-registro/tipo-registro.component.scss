@@ -1,7 +1,8 @@
-.tipo-usuario-container {
-  display:  flex;
-  flex-direction: row;
-  align-items: center;
+.tipo-usuario-container button {
+  margin-right: 10px; /* Adjust the value to your desired gap */
+}
 
-
+/* Optional: To make sure the last button doesn't have unnecessary margin */
+.tipo-usuario-container button:last-child {
+  margin-right: 0;
 }

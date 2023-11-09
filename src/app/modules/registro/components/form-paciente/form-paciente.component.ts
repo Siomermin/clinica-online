@@ -7,6 +7,7 @@ import {
 } from '@angular/forms';
 import { Paciente } from 'src/app/core/models/Paciente';
 import { AuthService } from 'src/app/core/services/auth.service';
+import Swal from 'sweetalert2';
 
 @Component({
   selector: 'app-form-paciente',
@@ -128,6 +129,7 @@ export class FormPacienteComponent {
         // Registration success
       }).catch((error) => {
         // Handle registration error
+        Swal.fire(error.message);
         console.error('Registration failed:', error);
       });
     }
