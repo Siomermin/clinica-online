@@ -1,11 +1,30 @@
 <div class="container p-5">
   <div class="d-flex flex-column align-items-center justify-content-center">
-    <h2 class="text-primary">Registro</h2>
+    <h2 class="text-primary">Registro {{ this.tipoUsuarioSeleccionado }}</h2>
     <div class="tipo-usuario-container mt-3 mb-4">
-        <button class="btn btn-primary tipo-usuario" routerLink="paciente">Paciente</button>
-        <button class="btn btn-success tipo-usuario" routerLink="especialista">Especialista</button>
+      <button
+        class="btn btn-primary tipo-usuario"
+        [class.selected]="tipoUsuarioSeleccionado === 'paciente'"
+        (click)="seleccionarTipoUsuario('paciente')"
+      >
+        Paciente
+      </button>
+      <button
+        class="btn btn-success tipo-usuario"
+        [class.selected]="tipoUsuarioSeleccionado === 'especialista'"
+        (click)="seleccionarTipoUsuario('especialista')"
+      >
+        Especialista
+      </button>
+      <button
+        class="btn btn-danger tipo-usuario"
+        [class.selected]="tipoUsuarioSeleccionado === 'admin'"
+        (click)="seleccionarTipoUsuario('admin')"
+      >
+        Admin
+      </button>
     </div>
-    <router-outlet></router-outlet>
+    <app-form-registro [tipoUsuario]="tipoUsuario"></app-form-registro>
     <span class="mt-4">
       ¿Ya estas registrado?
       <a routerLink="/login">Iniciá sesión</a>

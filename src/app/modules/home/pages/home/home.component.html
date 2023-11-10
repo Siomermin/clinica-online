@@ -1,6 +1,6 @@
 <div class="container-fluid">
   <div class="row">
-     <div class="col-12 col-md-6 mt-3" *ngIf="userData.rol === 'administrador'">
+     <div class="col-12 col-md-6 mt-3" *ngIf="userData.rol != 'administrador'">
       <a class="card" routerLink="/usuarios">
         <div class="card-body">
           Usuarios

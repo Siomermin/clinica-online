@@ -4,46 +4,37 @@ import { FirestoreService } from './firestore.service';
 import { Router } from '@angular/router';
 import { of } from 'rxjs';
 import { switchMap, map } from 'rxjs/operators'; // Corrected import for operators
-import Swal from 'sweetalert2';
-import { SpinnerService } from './spinner.service';
-
 
 @Injectable({
   providedIn: 'root'
 })
 export class AuthService {
 
-  constructor(private afAuth: AngularFireAuth, private afs: FirestoreService, private router: Router, private spinner: SpinnerService) { }
+  constructor(private afAuth: AngularFireAuth, private afs: FirestoreService) { }
 
-  registerUser(email: string, password: string, userData: any, path: string) {
+  async registerUser(email: string, password: string, userData: any, path: string) {
     try {
-      this.spinner.mostrar();
-      return this.afAuth.createUserWithEmailAndPassword(email, password)
-        .then((userCredential: any) => {
-          const user = userCredential.user;
+      const userCredential: any = await this.afAuth.createUserWithEmailAndPassword(email, password);
+      const user = userCredential.user;
 
-          // Incluyo el uid en la data que voy a subir a firestore
-          userData.uid = user.uid;
+      // Include the UID in the data to be uploaded to Firestore
+      userData.uid = user.uid;
 
-          return this.afs.save(userData, path).then(() => {
+      await this.afs.save(userData, path);
 
-            user.sendEmailVerification()
-              .then(() => {
+      // Send email verification and return the observable
+      const sendEmailVerificationObservable = user.sendEmailVerification();
 
-                this.logout();
-                Swal.fire("Registro exitoso! Se envio una verificacion adicional a su correo electronico.");
-                this.router.navigateByUrl('bienvenida');
+      // Logout after user registration
+      this.logout();
 
-              })
-              .catch((error: any) => {
-                // Handle the error
-                console.error('Error sending email verification:', error);
-              });
-          });
-        });
-    } finally {
-    this.spinner.esconder();
-  }
+      // Return the observable
+      return sendEmailVerificationObservable;
+    } catch (error) {
+      // Handle registration error
+      console.error('Error registering user:', error);
+      throw error; // You can handle this error in the component that calls registerUser
+    }
   }
 
 
@@ -54,11 +45,12 @@ export class AuthService {
       .then((userCredential) => {
         const user = userCredential.user;
         if (user!.emailVerified) {
-          this.router.navigateByUrl('home');
+          // this.router.navigateByUrl('home');
+          alert('si');
         } else {
           // Email is not verified. You can show a message to the user.
-          Swal.fire("Debe verificar su email antes para poder ingresar!!")
-          this.logout();
+          // Swal.fire("Debe verificar su email antes para poder ingresar!!")
+         // this.logout();
         }
       })
       .catch((error) => {
@@ -85,12 +77,6 @@ export class AuthService {
       })
     );
   }
-
-
-
-
-
-
 
 
   getLoggedUser() {

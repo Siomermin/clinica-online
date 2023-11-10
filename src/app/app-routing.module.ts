@@ -4,16 +4,20 @@ import { BienvenidaComponent } from './core/pages/bienvenida/bienvenida.componen
 
 const routes: Routes = [
   {
-    path: '', // Redirect from an empty path
-    redirectTo: 'bienvenida', // Redirect to the 'bienvenida' route
-    pathMatch: 'full', // Ensure a full match
+    path: '',
+    redirectTo: 'bienvenida',
+    pathMatch: 'full',
   },
   {
-    path: 'bienvenida', // Define the 'bienvenida' route
+    path: 'bienvenida',
     component: BienvenidaComponent,
   },
   {
     path: 'registro',
+    loadChildren: () => import('./modules/registro/registro.module').then(m => m.RegistroModule),
+  },
+  {
+    path: 'usuarios/registro',
     loadChildren: () => import('./modules/registro/registro.module').then(m => m.RegistroModule),
   },
   {

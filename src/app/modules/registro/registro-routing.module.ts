@@ -1,24 +1,26 @@
+// registro-routing.module.ts
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 import { TipoRegistroComponent } from './pages/tipo-registro/tipo-registro.component';
-import { FormPacienteComponent } from './components/form-paciente/form-paciente.component';
-import { FormEspecialistaComponent } from './components/form-especialista/form-especialista.component';
 
 const routes: Routes = [
   {
     path: '', component: TipoRegistroComponent,
-    children: [
-      {
-        path: 'paciente',
-        component: FormPacienteComponent
-      },
-      {
-        path: 'especialista',
-        component: FormEspecialistaComponent
-      }
-    ]
-  }
-
+    // children: [
+    //   {
+    //     path: 'paciente',
+    //     component: FormPacienteComponent
+    //   },
+    //   {
+    //     path: 'especialista',
+    //     component: FormEspecialistaComponent
+    //   },
+    //   {
+    //     path: 'admin',
+    //     component: FormAdminComponent
+    //   }
+    // ]
+  },
 ];
 
 @NgModule({
@@ -26,3 +28,5 @@ const routes: Routes = [
   exports: [RouterModule]
 })
 export class RegistroRoutingModule { }
+
+// Export the routes directly

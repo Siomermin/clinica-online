@@ -4,15 +4,14 @@ import { ReactiveFormsModule } from '@angular/forms';
 
 import { RegistroRoutingModule } from './registro-routing.module';
 import { TipoRegistroComponent } from './pages/tipo-registro/tipo-registro.component';
-import { FormPacienteComponent } from './components/form-paciente/form-paciente.component';
-import { FormEspecialistaComponent } from './components/form-especialista/form-especialista.component';
+
+import { FormRegistroComponent } from './components/form-registro/form-registro.component';
 
 
 @NgModule({
   declarations: [
     TipoRegistroComponent,
-    FormPacienteComponent,
-    FormEspecialistaComponent
+    FormRegistroComponent
   ],
   imports: [
     CommonModule,

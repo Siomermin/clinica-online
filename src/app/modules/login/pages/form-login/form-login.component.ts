@@ -1,6 +1,7 @@
 import { Component } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
+import { NgxSpinnerService } from 'ngx-spinner';
 import { Usuario } from 'src/app/core/models/Usuario';
 import { AuthService } from 'src/app/core/services/auth.service';
 
@@ -21,7 +22,7 @@ export class FormLoginComponent {
     return this.formLogin.get('password')!;
   }
 
-  constructor(private authService: AuthService, private router: Router) {
+  constructor(private authService: AuthService, private router: Router,  private spinner: NgxSpinnerService) {
     this.formLogin = new FormGroup({
       email: new FormControl('', [Validators.email, Validators.required]),
       password: new FormControl('', [Validators.required])
@@ -37,8 +38,11 @@ export class FormLoginComponent {
   }
 
   enviar(): void {
+    this.spinner.show();
     if (this.formLogin.valid) {
       this.authService.login(this.email.value, this.password.value);
+      this.spinner.hide();
+
     }
   }
 }

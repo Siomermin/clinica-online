@@ -9,8 +9,6 @@ import { Router } from '@angular/router';
 export class BienvenidaComponent {
   constructor(private router: Router) {}
 
-
-
   Navigate(path: string) {
     this.router.navigateByUrl(path);
   }
