@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { AngularFireAuth } from '@angular/fire/compat/auth';
 import { FirestoreService } from './firestore.service';
 import { AngularFireStorage } from '@angular/fire/compat/storage';
-import { Observable, from, of } from 'rxjs';
+import { Observable, from, of, throwError } from 'rxjs';
 import { switchMap, map } from 'rxjs/operators'; // Corrected import for operators
 
 @Injectable({
@@ -86,16 +86,27 @@ export class AuthService {
     }
   }
 
-  login(email: string, password: string): Observable<void> {
-    return from(
-      this.afAuth
-        .signInWithEmailAndPassword(email, password)
-        .then((userCredential) => {
-          const user = userCredential.user;
-          if (!user!.emailVerified) {
-            throw new Error('Email is not verified');
-          }
-        })
+  login(email: string, password: string) {
+    return from(this.afAuth.signInWithEmailAndPassword(email, password)).pipe(
+      switchMap((userCredential) => {
+        const user = userCredential.user;
+        return this.getUserData().pipe(
+          switchMap((userData) => {
+            // Check if the email is verified
+            if (!user?.emailVerified) {
+              throw Error('Debes verificar tu email para poder ingresar!!');
+            }
+
+            // Check the user's role and verification status
+            if (userData!['rol'] === 'especialista' && userData!['verificado'] === 'f') {
+              throw Error('El usuario no esta habilitado por un admin para ingresar!!');
+            }
+
+            // For example, you can return a success message
+            return 'Login successful';
+          })
+        );
+      })
     );
   }
 

@@ -15,5 +15,6 @@ import { BienvenidaComponent } from './pages/bienvenida/bienvenida.component';
     NavbarComponent,
   ],
 
+
 })
 export class CoreModule { }

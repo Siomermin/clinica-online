@@ -17,6 +17,7 @@
         Especialista
       </button>
       <button
+        *ngIf="usuarioLogeado?.rol === 'admin'"
         class="btn btn-danger tipo-usuario"
         [class.selected]="tipoUsuarioSeleccionado === 'admin'"
         (click)="seleccionarTipoUsuario('admin')"
@@ -25,7 +26,7 @@
       </button>
     </div>
     <app-form-registro [tipoUsuario]="tipoUsuario"></app-form-registro>
-    <span class="mt-4">
+    <span class="mt-4" *ngIf="!usuarioLogeado">
       ¿Ya estas registrado?
       <a routerLink="/login">Iniciá sesión</a>
     </span>

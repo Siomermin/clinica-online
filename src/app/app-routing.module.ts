@@ -32,6 +32,18 @@ const routes: Routes = [
     path: 'usuarios',
     loadChildren: () => import('./modules/usuarios/usuarios.module').then(m => m.UsuariosModule),
   },
+  {
+    path: 'mi-perfil',
+    loadChildren: () => import('./modules/mi-perfil/mi-perfil.module').then(m => m.MiPerfilModule),
+  },
+  {
+    path: 'solicitar-turno',
+    loadChildren: () => import('./modules/turnos/solicitar-turno/solicitar-turno.module').then(m => m.SolicitarTurnoModule),
+  },
+  {
+    path: 'mis-turnos',
+    loadChildren: () => import('./modules/turnos/mis-turnos/mis-turnos.module').then(m => m.MisTurnosModule),
+  },
 ];
 
 @NgModule({

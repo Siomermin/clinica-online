@@ -1,8 +1,8 @@
-import { Component } from '@angular/core';
+import { Component, OnDestroy } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import { NgxSpinnerService } from 'ngx-spinner';
-import { Usuario } from 'src/app/core/models/Usuario';
+import { Subject, takeUntil } from 'rxjs';
 import { AuthService } from 'src/app/core/services/auth.service';
 import { FirestoreService } from 'src/app/core/services/firestore.service';
 import Swal from 'sweetalert2';
@@ -12,9 +12,10 @@ import Swal from 'sweetalert2';
   templateUrl: './form-login.component.html',
   styleUrls: ['./form-login.component.scss']
 })
-export class FormLoginComponent {
+export class FormLoginComponent implements OnDestroy {
   formLogin: FormGroup;
   usuariosAccesoRapido: any;
+  private ngUnsubscribe = new Subject<void>();
 
   get email() {
     return this.formLogin.get('email')!;
@@ -29,6 +30,11 @@ export class FormLoginComponent {
       email: new FormControl('', [Validators.email, Validators.required]),
       password: new FormControl('', [Validators.required])
     });
+  }
+
+  ngOnDestroy() {
+    this.ngUnsubscribe.next();
+    this.ngUnsubscribe.complete();
   }
 
   ngOnInit(): void {
@@ -49,14 +55,16 @@ export class FormLoginComponent {
 
   setDatosDeLogin(user: any) {
     this.email.setValue(user.email);
-    this.password.setValue(user.email);
+    this.password.setValue(123321);
     this.formLogin.updateValueAndValidity();
   }
 
-  enviar(): void {
+  onSubmit(): void {
     this.spinner.show();
     if (this.formLogin.valid) {
-      this.authService.login(this.email.value, this.password.value).subscribe(
+      this.authService.login(this.email.value, this.password.value)
+      .pipe(takeUntil(this.ngUnsubscribe))
+      .subscribe(
         () => {
           this.spinner.hide();
           Swal.fire('Bienvenido!');
@@ -67,7 +75,11 @@ export class FormLoginComponent {
           console.error('Login failed:', error);
           if (error.message === 'Email is not verified') {
             Swal.fire('Debe verificar su correo electronico para iniciar sesion!');
-          } else {
+          }
+          else if (error.message === 'Usuario no habilitado') {
+            Swal.fire('Su usuario no esta hablitado por un admin para ingresar!');
+          }
+          else {
             Swal.fire(error.message);
           }
         }

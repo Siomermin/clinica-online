@@ -13,6 +13,7 @@ import Swal from 'sweetalert2';
 })
 export class FormRegistroComponent implements OnChanges   {
   @Input() tipoUsuario!: string; // 'paciente', 'especialista', 'admin'
+  usuarioLogeado: any; // Create a variable to hold user data
   rutaImagenA!: string;
   rutaImagenB!: string;
   imagenAFile: any;
@@ -47,6 +48,10 @@ export class FormRegistroComponent implements OnChanges   {
     return this.formRegistro.get('especialidad')!;
   }
 
+  get otraEspecialidad() {
+    return this.formRegistro.get('otraEspecialidad')!;
+  }
+
   get email() {
     return this.formRegistro.get('email')!;
   }
@@ -74,11 +79,20 @@ export class FormRegistroComponent implements OnChanges   {
       email: ['', [Validators.required, Validators.email]],
       password: ['', Validators.required],
       especialidad: [null, Validators.required],
+      otraEspecialidad: ['', Validators.required],
       obra_social: [null, Validators.required],
       imagen_a: [undefined, Validators.required],
       imagen_b: [undefined, Validators.required],
     });
 
+    this.authService.getUserData().subscribe(data => {
+      if (data) {
+        this.usuarioLogeado = data;
+
+        console.log(this.usuarioLogeado);
+        // Now 'this.userData' contains the user data
+      }
+    });
   }
   ngOnChanges(changes: SimpleChanges): void {
     // Cuando cambia el tipo de usuario
@@ -98,6 +112,7 @@ export class FormRegistroComponent implements OnChanges   {
       this.formRegistro.addControl('imagen_b', this.fb.control(null, Validators.required)); // Initialize with null
     } else if (this.tipoUsuario === 'especialista') {
       this.formRegistro.addControl('especialidad', this.fb.control(null, Validators.required));
+      this.formRegistro.addControl('otraEspecialidad', this.fb.control('', Validators.required));
     }
 
     // Form control que van en todos los tipos de formulario admin, paciente y especialista.
@@ -127,6 +142,18 @@ export class FormRegistroComponent implements OnChanges   {
 
       this.formRegistro.reset();
   }
+
+  onEspecialidadChange(event: any) {
+    const selectedEspecialidad = event.target.value;
+
+    // Show or hide the input field based on the selected option
+    if (selectedEspecialidad === 'Otra') {
+      this.formRegistro.get('otraEspecialidad')!.enable();
+    } else {
+      this.formRegistro.get('otraEspecialidad')!.disable();
+    }
+  }
+
 
   imagenA_change(event: any) {
     const archivo = event.target.files[0];
@@ -184,7 +211,12 @@ export class FormRegistroComponent implements OnChanges   {
       }
 
       if (this.tipoUsuario === 'especialista') {
-        data['especialidad'] = this.especialidad.value;
+        if (this.especialidad.value == 'Otra') {
+          data['especialidad'] = this.otraEspecialidad.value;
+        }
+        else {
+          data['especialidad'] = this.especialidad.value;
+        }
         data['rol'] = 'especialista';
         data['verificado'] = 'f';
       }
@@ -197,7 +229,12 @@ export class FormRegistroComponent implements OnChanges   {
       .then(() => {
         this.spinner.hide();
         Swal.fire("Registro exitoso! Se envió una verificación adicional a su correo electrónico.");
-        this.router.navigateByUrl('bienvenida');
+        // if (this.usuarioLogeado) {
+        //   this.router.navigateByUrl('usuarios');
+        // }
+        // else {
+          this.router.navigateByUrl('bienvenida');
+        //}
       })
       .catch((error) => {
         this.spinner.hide();

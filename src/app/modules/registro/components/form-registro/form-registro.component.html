@@ -37,19 +37,24 @@
     </div>
   </div>
 
-    <ng-container *ngIf="tipoUsuario === 'especialista'">
-      <div class="text-start my-2 input col-md-12">
-        <label class="text-muted" for="especialidad">Especialidad</label>
-        <select formControlName="especialidad" class="form-select" id="especialidad">
-          <option value="Odontologia">Odontologia</option>
-          <option value="Pediatria">Pediatria</option>
-          <option value="Oftamologia">Oftamologia</option>
-        </select>
-        <small class="text-danger" *ngIf="especialidad?.touched && especialidad?.errors">
-          Ingrese una opción
-        </small>
-      </div>
-    </ng-container>
+  <ng-container *ngIf="tipoUsuario === 'especialista'">
+    <div class="text-start my-2 input col-md-12">
+      <label class="text-muted" for="especialidad">Especialidad</label>
+      <select formControlName="especialidad" class="form-select" id="especialidad" (change)="onEspecialidadChange($event)">
+        <option value="Odontologia">Odontologia</option>
+        <option value="Pediatria">Pediatria</option>
+        <option value="Oftamologia">Oftamologia</option>
+        <option value="Otra">Otra</option>
+      </select>
+
+      <input *ngIf="especialidad.value === 'Otra'" formControlName="otraEspecialidad" type="text" class="form-control my-2" placeholder="Ingrese su especialidad">
+
+      <small class="text-danger" *ngIf="especialidad?.touched && especialidad?.errors">
+        Ingrese una opción
+      </small>
+    </div>
+  </ng-container>
+
     <ng-container *ngIf="tipoUsuario === 'paciente'">
       <div class="text-start my-2 input col-md-12">
         <label class="text-muted" for="obra_social">Obra Social</label>

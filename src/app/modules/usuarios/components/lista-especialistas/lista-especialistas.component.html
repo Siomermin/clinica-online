@@ -3,7 +3,7 @@
     <tr>
       <th>Nombre</th>
       <th>Correo Electronico</th>
-      <th>Especialidades</th>
+      <th>Especialidad</th>
       <th>Habilitar</th>
     </tr>
   </thead>
@@ -20,8 +20,8 @@
       <td>
         <p class="fw-normal mb-1">{{ usuario.email }}</p>
       </td>
-      <td><span class="badge badge-primary" *ngFor="let especialidad of usuario.especialidades">{{ especialidad |
-          titlecase }}</span></td>
+      <td>
+        <p>{{ usuario.especialidad | titlecase }}</p>
       <td>
         <button (click)="actualizarVerificado(usuario)" type="button"
           class="btn btn-link btn-sm btn-rounded">
