@@ -1,4 +1,25 @@
-<div class="container">
-  <p>usuarios works!</p>
-  <a routerLink="/usuarios/registro">Registrar Usuarios</a>
+
+<div class="container-fluid">
+  <div class="row">
+    <nav class="nav nav-pills flex-column col-md-2 ms-2">
+        <a class="card mt-4"  routerLinkActive="bg-primary text-light" routerLink="/usuarios/especialistas">
+          <div class="card-body text-center">
+            Lista Especialistas
+          </div>
+        </a>
+        <a class="card mt-2"  routerLinkActive="bg-primary text-light" routerLink="/usuarios/pacientes">
+          <div class="card-body text-center">
+            Lista Pacientes
+          </div>
+        </a>
+        <a class="card mt-2" routerLink="/usuarios/registro">
+          <div class="card-body text-center">
+            Registrar Usuarios
+          </div>
+        </a>
+    </nav>
+    <div  class="col">
+      <router-outlet></router-outlet>
+    </div>
+  </div>
 </div>

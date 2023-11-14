@@ -1,14 +1,28 @@
 import { Injectable } from '@angular/core';
-import firebase from 'firebase/compat/app';
-import { Firestore, addDoc, collection, collectionData, getDoc, getDocs, updateDoc } from '@angular/fire/firestore';
-import { doc } from 'firebase/firestore';
-
+import {
+  DocumentReference,
+  Firestore,
+  addDoc,
+  collection,
+  collectionData,
+  deleteDoc,
+  query,
+  where,
+  doc,
+  updateDoc,
+} from '@angular/fire/firestore';
+import { Observable } from 'rxjs';
 
 @Injectable({
   providedIn: 'root',
 })
 export class FirestoreService {
-  constructor(private firestore: Firestore) {}
+  private coleccion: any;
+
+  constructor(private firestore: Firestore) {
+    this.coleccion = collection(this.firestore, 'usuarios');
+  }
+
 
   save(data: any, path: string) {
     const col = collection(this.firestore, path);
@@ -22,9 +36,48 @@ export class FirestoreService {
     return observable;
   }
 
-  // New method to get a specific document
-  getDocument(path: string, documentId: string) {
-    const documentRef = doc(this.firestore, path, documentId);
-    return getDoc(documentRef);
+  getUsuarios(): Observable<Array<any>> {
+    return collectionData(this.coleccion, { idField: 'id' });
   }
+
+  getUsuariosAccesoRapido(): Observable<Array<any>> {
+    // Creating a query with a where clause to filter by the 'test' field equal to 't'
+    const q = query(this.coleccion, where('test', '==', 't'));
+
+    // Fetching data from Firestore using the created query and explicitly defining the type
+    return collectionData<any>(q, { idField: 'id' }) as Observable<Array<any>>;
+  }
+
+  getUsuariosPorRol(rol: string): Observable<Array<any>> {
+    const q = query(this.coleccion, where('rol', '==', rol));
+
+    // Fetching data from Firestore using the created query and explicitly defining the type
+    return collectionData<any>(q, { idField: 'id' }) as Observable<Array<any>>;
+  }
+
+
+  setUsuario(usuario: any): Promise<DocumentReference<any>> {
+    return addDoc(this.coleccion, { ...usuario });
+  }
+
+  deleteUsuario(id: string): Promise<void> {
+    const documento = doc(this.coleccion, id);
+    return deleteDoc(documento);
+  }
+
+  updateUsuario(usuario: any): Promise<void> {
+    const documento = doc(this.coleccion, usuario.id);
+    return updateDoc(documento, {
+      ...usuario,
+    });
+  }
+
+
+
+
+
+
+
+
 }
+

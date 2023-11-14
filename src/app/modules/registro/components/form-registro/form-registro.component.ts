@@ -1,6 +1,8 @@
 import { Component, Input, OnChanges, SimpleChanges } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
+import { NgxSpinnerService } from 'ngx-spinner';
+import { Observable } from 'rxjs';
 import { AuthService } from 'src/app/core/services/auth.service';
 import Swal from 'sweetalert2';
 
@@ -13,10 +15,11 @@ export class FormRegistroComponent implements OnChanges   {
   @Input() tipoUsuario!: string; // 'paciente', 'especialista', 'admin'
   rutaImagenA!: string;
   rutaImagenB!: string;
-
+  imagenAFile: any;
+  imagenBFile: any;
   formRegistro!: FormGroup;
 
-  constructor(private fb: FormBuilder, private authService: AuthService, private router: Router) {
+  constructor(private fb: FormBuilder, private authService: AuthService, private router: Router, private spinner: NgxSpinnerService) {
   }
 
 
@@ -77,21 +80,19 @@ export class FormRegistroComponent implements OnChanges   {
     });
 
   }
-
   ngOnChanges(changes: SimpleChanges): void {
+    // Cuando cambia el tipo de usuario
     if (changes['tipoUsuario'] && !changes['tipoUsuario'].firstChange) {
-      // TipoUsuario has changed, update form controls
       this.updateFormControls();
     }
   }
 
   updateFormControls(): void {
-    // Clear existing form controls
     Object.keys(this.formRegistro.controls).forEach(controlName => {
       this.formRegistro.removeControl(controlName);
     });
 
-    // Add new form controls based on tipoUsuario
+    //  Form control especificos
     if (this.tipoUsuario === 'paciente') {
       this.formRegistro.addControl('obra_social', this.fb.control(null, Validators.required));
       this.formRegistro.addControl('imagen_b', this.fb.control(null, Validators.required)); // Initialize with null
@@ -99,7 +100,7 @@ export class FormRegistroComponent implements OnChanges   {
       this.formRegistro.addControl('especialidad', this.fb.control(null, Validators.required));
     }
 
-    // Add common form controls
+    // Form control que van en todos los tipos de formulario admin, paciente y especialista.
     this.formRegistro.addControl('nombre', this.fb.control('', Validators.required));
     this.formRegistro.addControl('apellido', this.fb.control('', Validators.required));
     this.formRegistro.addControl('edad', this.fb.control(null, Validators.required));
@@ -108,15 +109,12 @@ export class FormRegistroComponent implements OnChanges   {
     this.formRegistro.addControl('password', this.fb.control('', Validators.required));
     this.formRegistro.addControl('imagen_a', this.fb.control(undefined, Validators.required));
 
-    // Reset values for image controls
     this.formRegistro.get('imagen_a')?.setValue(undefined);
     this.formRegistro.get('imagen_b')?.setValue(undefined);
 
-    // Reset image variables
     this.rutaImagenA = '';
     this.rutaImagenB = '';
 
-    // Clear file input
     const inputImagenA = document.getElementById('imagen_a') as HTMLInputElement;
     if (inputImagenA) {
       inputImagenA.value = '';
@@ -137,6 +135,8 @@ export class FormRegistroComponent implements OnChanges   {
     this.formRegistro.get(elementoId)?.setValue(archivo);
     reader.readAsDataURL(this.formRegistro.get(elementoId)?.value);
 
+    this.imagenAFile = archivo;
+
     reader.onload = () => {
       this.rutaImagenA = reader.result as string;
     };
@@ -150,13 +150,16 @@ export class FormRegistroComponent implements OnChanges   {
     this.formRegistro.get(elementoId)?.setValue(archivo);
     reader.readAsDataURL(this.formRegistro.get(elementoId)?.value);
 
+    this.imagenBFile = archivo;
+
     reader.onload = () => {
       this.rutaImagenB = reader.result as string;
     };
   }
 
-  onSubmit(): void {
+  async  onSubmit(): Promise<void> {
     if (this.formRegistro.valid) {
+      this.spinner.show();
       const data: { [key: string]: any } = {
         nombre: this.nombre.value,
         apellido: this.apellido.value,
@@ -166,35 +169,41 @@ export class FormRegistroComponent implements OnChanges   {
         imagen_a: this.imagen_a.value.name,
       };
 
+      const imgs: { [key: string]: any } = {
+        imagen_a: this.imagen_a.value.name,
+        imagen_a_file: this.imagenAFile instanceof Observable ? await this.imagenAFile.toPromise() : this.imagenAFile
+      };
+
       if (this.tipoUsuario === 'paciente') {
         data['imagen_b'] = this.imagen_b.value.name;
         data['obra_social'] = this.obra_social.value;
         data['rol'] = 'paciente';
+
+        imgs['imagen_b'] = this.imagen_b.value.name;
+        imgs['imagen_b_file'] = this.imagenBFile instanceof Observable ? await this.imagenBFile.toPromise() : this.imagenBFile;
       }
 
       if (this.tipoUsuario === 'especialista') {
         data['especialidad'] = this.especialidad.value;
         data['rol'] = 'especialista';
+        data['verificado'] = 'f';
       }
 
       if (this.tipoUsuario === 'admin') {
         data['rol'] = 'admin';
       }
 
-      this.authService.registerUser(this.email.value, this.password.value, data, 'usuarios')
+      this.authService.registerUser(this.email.value, this.password.value, data, imgs)
       .then(() => {
-        // Handle success
+        this.spinner.hide();
         Swal.fire("Registro exitoso! Se envió una verificación adicional a su correo electrónico.");
         this.router.navigateByUrl('bienvenida');
       })
       .catch((error) => {
-        // Handle error
+        this.spinner.hide();
         Swal.fire(error.message);
         console.error('Error registering user:', error);
       });
-
-
-
     }
   }
 
