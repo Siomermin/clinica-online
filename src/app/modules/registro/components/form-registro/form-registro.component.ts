@@ -60,7 +60,6 @@ export class FormRegistroComponent implements OnChanges   {
     return this.formRegistro.get('password')!;
   }
 
-
   get imagen_a() {
     return this.formRegistro.get('imagen_a')!;
   }

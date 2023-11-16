@@ -54,8 +54,9 @@ export class SolicitarTurnoComponent {
     const turno = {
       paciente: this.paciente.email,
       especialista: this.especialista.email,
+      especialidad: this.especialista.especialidad,
       fecha: fechaTurno,
-      estado: 't'
+      estado: 'Solicitado'
     }
 
     console.log(turno);

@@ -17,6 +17,7 @@ export class ListaHorariosTurnoComponent {
     return 15;
   }
 
+  // 22 son todos los horarios disponibles.
   get modulos(): number {
     return (19 - 8) * 2;
   }

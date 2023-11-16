@@ -55,7 +55,12 @@ export class FirestoreService {
     return collectionData<any>(q, { idField: 'id' }) as Observable<Array<any>>;
   }
 
+  getUsuarioPorEmail(email: string): Observable<Array<any>> {
+    const q = query(this.coleccion, where('email', '==', email));
 
+    // Fetching data from Firestore using the created query and explicitly defining the type
+    return collectionData<any>(q, { idField: 'id' }) as Observable<Array<any>>;
+  }
   setUsuario(usuario: any): Promise<DocumentReference<any>> {
     return addDoc(this.coleccion, { ...usuario });
   }
