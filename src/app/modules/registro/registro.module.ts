@@ -6,6 +6,7 @@ import { RegistroRoutingModule } from './registro-routing.module';
 import { TipoRegistroComponent } from './pages/tipo-registro/tipo-registro.component';
 
 import { FormRegistroComponent } from './components/form-registro/form-registro.component';
+import { NgxCaptchaModule } from 'ngx-captcha';
 
 
 @NgModule({
@@ -17,6 +18,7 @@ import { FormRegistroComponent } from './components/form-registro/form-registro.
     CommonModule,
     RegistroRoutingModule,
     ReactiveFormsModule,
+    NgxCaptchaModule
   ]
 })
 export class RegistroModule { }

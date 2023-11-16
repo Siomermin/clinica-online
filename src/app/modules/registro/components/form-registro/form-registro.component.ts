@@ -19,6 +19,7 @@ export class FormRegistroComponent implements OnChanges   {
   imagenAFile: any;
   imagenBFile: any;
   formRegistro!: FormGroup;
+  siteKey: string = '6LdzsREpAAAAANXJ_uYOzd8S4nhN0iM6f6V7D3pR';
 
   constructor(private fb: FormBuilder, private authService: AuthService, private router: Router, private spinner: NgxSpinnerService) {
   }
@@ -70,6 +71,8 @@ export class FormRegistroComponent implements OnChanges   {
 
 
   ngOnInit(): void {
+
+    // Form predeterminado = paciente.
     this.formRegistro = this.fb.group({
       nombre: ['', Validators.required],
       apellido: ['', Validators.required],
@@ -77,11 +80,12 @@ export class FormRegistroComponent implements OnChanges   {
       dni: [null, Validators.required],
       email: ['', [Validators.required, Validators.email]],
       password: ['', Validators.required],
-      especialidad: [null, Validators.required],
-      otraEspecialidad: ['', Validators.required],
+    //  especialidad: [null, Validators.required],
+    //  otraEspecialidad: ['', Validators.required],
       obra_social: [null, Validators.required],
       imagen_a: [undefined, Validators.required],
       imagen_b: [undefined, Validators.required],
+      recaptcha: ['', Validators.required]
     });
 
     this.authService.getUserData().subscribe(data => {
@@ -92,6 +96,9 @@ export class FormRegistroComponent implements OnChanges   {
         // Now 'this.userData' contains the user data
       }
     });
+
+    console.log( this.formRegistro.controls);
+
   }
   ngOnChanges(changes: SimpleChanges): void {
     // Cuando cambia el tipo de usuario
@@ -122,6 +129,7 @@ export class FormRegistroComponent implements OnChanges   {
     this.formRegistro.addControl('email', this.fb.control('', [Validators.required, Validators.email]));
     this.formRegistro.addControl('password', this.fb.control('', Validators.required));
     this.formRegistro.addControl('imagen_a', this.fb.control(undefined, Validators.required));
+    this.formRegistro.addControl('recaptcha', this.fb.control('', Validators.required));
 
     this.formRegistro.get('imagen_a')?.setValue(undefined);
     this.formRegistro.get('imagen_b')?.setValue(undefined);
@@ -139,6 +147,7 @@ export class FormRegistroComponent implements OnChanges   {
       inputImagenB.value = '';
     }
 
+    console.log( this.formRegistro.controls);
       this.formRegistro.reset();
   }
 
