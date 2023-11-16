@@ -22,3 +22,11 @@ Se pueden registrar usuarios del tipo paciente o especialista.
 Pantalla de login, donde se puede acceder mediante los usuarios de acceso rapido.
 
 ![login](https://github.com/Siomermin/clinica-online/assets/77855994/959d5b40-4b44-4d08-b507-dee754b81d9b)
+
+Dentro de la aplicacion, si el perfil del usuario lo permite, se puede ver la lista de usuarios registrados y se pueden habilitar/deshabilitar su acceso.
+
+![administrar usuarios](https://github.com/Siomermin/clinica-online/assets/77855994/ae87afdb-7507-4023-b347-24795071c06a)
+
+Ademas se puede revisar el perfil del usuario conectado con sus respectivos datos.
+
+![perfil](https://github.com/Siomermin/clinica-online/assets/77855994/29add58f-299d-4ea1-925b-50e592979dbf)
