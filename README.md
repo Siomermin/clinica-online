@@ -12,4 +12,13 @@ También contamos con un sector dentro de la clínica que se encarga de la organ
 administración de la misma.
 
 
+Pagina de bienvenida que tiene los accesos al login y registro del sistema
 ![1](https://github.com/Siomermin/clinica-online/assets/77855994/220cbe59-e3d1-4039-bdbe-237989c469f2)
+
+Se pueden registrar usuarios del tipo paciente o especialista.
+
+![registro](https://github.com/Siomermin/clinica-online/assets/77855994/4fc9ec96-b557-4451-bbe3-e9bd5877289f)
+
+Pantalla de login, donde se puede acceder mediante los usuarios de acceso rapido.
+
+![login](https://github.com/Siomermin/clinica-online/assets/77855994/959d5b40-4b44-4d08-b507-dee754b81d9b)
