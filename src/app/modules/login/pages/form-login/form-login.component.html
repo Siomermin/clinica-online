@@ -1,5 +1,5 @@
 <div class="container-fluid">
-  <div class="row h-100">
+  <div class="row">
     <div
       class="col-md-6 col-lg-7 col-xl-8 d-flex align-items-center ps-5 background"
     >
@@ -64,21 +64,21 @@
       class="col-md-6 col-lg-5 col-xl-4 border-dark p-5 bg-light d-flex flex-column justify-content-center"
     >
       <h2 class="text-center pb-3 fw-bold text-primary">
-        Clinica
+        Acceso
         <i class="fa-solid fa-shield-halved"></i>
-        Online
+        Rapido
       </h2>
       <div class="text-center mt-4 row border-top">
-        <h5 class="text-primary py-3">Acceso rapido</h5>
         <div *ngFor="let user of usuariosAccesoRapido" class="profile col">
           <img
             [src]="user.imagen_a_url"
             class="col btn rounded-circle p-0 m-4"
             height="50"
+            width="50"
             role="button"
             (click)="setDatosDeLogin(user)"
           />
-          <p>{{ user.rol | uppercase }}</p>
+          <p class="text-dark">{{ user.rol | titlecase }}</p>
         </div>
       </div>
     </div>

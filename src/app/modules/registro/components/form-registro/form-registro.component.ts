@@ -1,5 +1,11 @@
 import { Component, Input, OnChanges, SimpleChanges } from '@angular/core';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import {
+  AbstractControl,
+  FormBuilder,
+  FormGroup,
+  ValidationErrors,
+  Validators,
+} from '@angular/forms';
 import { Router } from '@angular/router';
 import { NgxSpinnerService } from 'ngx-spinner';
 import { Observable } from 'rxjs';
@@ -9,9 +15,9 @@ import Swal from 'sweetalert2';
 @Component({
   selector: 'app-form-registro',
   templateUrl: './form-registro.component.html',
-  styleUrls: ['./form-registro.component.scss']
+  styleUrls: ['./form-registro.component.scss'],
 })
-export class FormRegistroComponent implements OnChanges   {
+export class FormRegistroComponent implements OnChanges {
   @Input() tipoUsuario!: string; // 'paciente', 'especialista', 'admin'
   usuarioLogeado: any; // Create a variable to hold user data
   rutaImagenA!: string;
@@ -19,11 +25,15 @@ export class FormRegistroComponent implements OnChanges   {
   imagenAFile: any;
   imagenBFile: any;
   formRegistro!: FormGroup;
+  especialidades: string[] = ['Odontologia', 'Cirugía plástica', 'Pediatría'];
   siteKey: string = '6LdzsREpAAAAANXJ_uYOzd8S4nhN0iM6f6V7D3pR';
 
-  constructor(private fb: FormBuilder, private authService: AuthService, private router: Router, private spinner: NgxSpinnerService) {
-  }
-
+  constructor(
+    private fb: FormBuilder,
+    private authService: AuthService,
+    private router: Router,
+    private spinner: NgxSpinnerService
+  ) {}
 
   get nombre() {
     return this.formRegistro.get('nombre')!;
@@ -69,26 +79,31 @@ export class FormRegistroComponent implements OnChanges   {
     return this.formRegistro.get('imagen_b')!;
   }
 
+    // Custom validator function to allow only letters
+    soloLetras(control: AbstractControl): { [key: string]: any } | null {
+      const onlyLettersRegex = /^[a-zA-Z\s]*$/; // Only letters and spaces allowed
+      const valid = onlyLettersRegex.test(control.value);
+      return valid ? null : { 'invalidCharacters': true };
+    }
 
   ngOnInit(): void {
-
     // Form predeterminado = paciente.
     this.formRegistro = this.fb.group({
-      nombre: ['', Validators.required],
-      apellido: ['', Validators.required],
+      nombre: ['', [Validators.required, this.soloLetras]],
+      apellido: ['', [Validators.required, this.soloLetras]],
       edad: [null, Validators.required],
-      dni: [null, Validators.required],
+      dni: [null, [Validators.required, Validators.minLength(7), Validators.maxLength(8)]],
       email: ['', [Validators.required, Validators.email]],
       password: ['', Validators.required],
-    //  especialidad: [null, Validators.required],
-    //  otraEspecialidad: ['', Validators.required],
+      //  especialidad: [null, Validators.required],
+      //  otraEspecialidad: ['', Validators.required],
       obra_social: [null, Validators.required],
       imagen_a: [undefined, Validators.required],
       imagen_b: [undefined, Validators.required],
-      recaptcha: ['', Validators.required]
+      recaptcha: ['', Validators.required],
     });
 
-    this.authService.getUserData().subscribe(data => {
+    this.authService.getUserData().subscribe((data) => {
       if (data) {
         this.usuarioLogeado = data;
 
@@ -97,8 +112,7 @@ export class FormRegistroComponent implements OnChanges   {
       }
     });
 
-    console.log( this.formRegistro.controls);
-
+    console.log(this.formRegistro.controls);
   }
   ngOnChanges(changes: SimpleChanges): void {
     // Cuando cambia el tipo de usuario
@@ -107,29 +121,69 @@ export class FormRegistroComponent implements OnChanges   {
     }
   }
 
+
   updateFormControls(): void {
-    Object.keys(this.formRegistro.controls).forEach(controlName => {
+    Object.keys(this.formRegistro.controls).forEach((controlName) => {
       this.formRegistro.removeControl(controlName);
     });
 
     //  Form control especificos
     if (this.tipoUsuario === 'paciente') {
-      this.formRegistro.addControl('obra_social', this.fb.control(null, Validators.required));
-      this.formRegistro.addControl('imagen_b', this.fb.control(null, Validators.required)); // Initialize with null
+      this.formRegistro.addControl(
+        'obra_social',
+        this.fb.control(null, Validators.required)
+      );
+      this.formRegistro.addControl(
+        'imagen_b',
+        this.fb.control(null, Validators.required)
+      ); // Initialize with null
     } else if (this.tipoUsuario === 'especialista') {
-      this.formRegistro.addControl('especialidad', this.fb.control(null, Validators.required));
-      this.formRegistro.addControl('otraEspecialidad', this.fb.control('', Validators.required));
+      this.formRegistro.addControl(
+        'especialidad',
+        this.fb.control(null, [
+          Validators.required,
+          this.maxSelectedOptionsValidator(2),
+        ])
+      );
+      this.formRegistro.addControl(
+        'otraEspecialidad',
+        this.fb.control('')
+      );
     }
 
     // Form control que van en todos los tipos de formulario admin, paciente y especialista.
-    this.formRegistro.addControl('nombre', this.fb.control('', Validators.required));
-    this.formRegistro.addControl('apellido', this.fb.control('', Validators.required));
-    this.formRegistro.addControl('edad', this.fb.control(null, Validators.required));
-    this.formRegistro.addControl('dni', this.fb.control(null, Validators.required));
-    this.formRegistro.addControl('email', this.fb.control('', [Validators.required, Validators.email]));
-    this.formRegistro.addControl('password', this.fb.control('', Validators.required));
-    this.formRegistro.addControl('imagen_a', this.fb.control(undefined, Validators.required));
-    this.formRegistro.addControl('recaptcha', this.fb.control('', Validators.required));
+    this.formRegistro.addControl(
+      'nombre',
+      this.fb.control('', [Validators.required, this.soloLetras])
+    );
+    this.formRegistro.addControl(
+      'apellido',
+      this.fb.control('', [Validators.required, this.soloLetras])
+    );
+    this.formRegistro.addControl(
+      'edad',
+      this.fb.control(null, Validators.required)
+    );
+    this.formRegistro.addControl(
+      'dni',
+      this.fb.control(null,  [Validators.required, Validators.minLength(7), Validators.maxLength(8)])
+    );
+    this.formRegistro.addControl(
+      'email',
+      this.fb.control('', [Validators.required, Validators.email])
+    );
+    this.formRegistro.addControl(
+      'password',
+      this.fb.control('', Validators.required)
+    );
+    this.formRegistro.addControl(
+      'imagen_a',
+      this.fb.control(undefined, Validators.required)
+    );
+    this.formRegistro.addControl(
+      'recaptcha',
+      this.fb.control('', Validators.required)
+    );
 
     this.formRegistro.get('imagen_a')?.setValue(undefined);
     this.formRegistro.get('imagen_b')?.setValue(undefined);
@@ -137,31 +191,53 @@ export class FormRegistroComponent implements OnChanges   {
     this.rutaImagenA = '';
     this.rutaImagenB = '';
 
-    const inputImagenA = document.getElementById('imagen_a') as HTMLInputElement;
+    const inputImagenA = document.getElementById(
+      'imagen_a'
+    ) as HTMLInputElement;
     if (inputImagenA) {
       inputImagenA.value = '';
     }
 
-    const inputImagenB = document.getElementById('imagen_b') as HTMLInputElement;
+    const inputImagenB = document.getElementById(
+      'imagen_b'
+    ) as HTMLInputElement;
     if (inputImagenB) {
       inputImagenB.value = '';
     }
 
-    console.log( this.formRegistro.controls);
-      this.formRegistro.reset();
+    console.log(this.formRegistro.controls);
+    this.formRegistro.reset();
   }
 
-  onEspecialidadChange(event: any) {
-    const selectedEspecialidad = event.target.value;
+  // Custom validator function
+  maxSelectedOptionsValidator(maxOptions: number) {
+    return (control: AbstractControl): ValidationErrors | null => {
+      const selectedOptions = control.value;
 
-    // Show or hide the input field based on the selected option
-    if (selectedEspecialidad === 'Otra') {
-      this.formRegistro.get('otraEspecialidad')!.enable();
-    } else {
-      this.formRegistro.get('otraEspecialidad')!.disable();
+      if (
+        Array.isArray(selectedOptions) &&
+        selectedOptions.length > maxOptions
+      ) {
+        return { maxOptionsExceeded: true };
+      }
+
+      return null;
+    };
+  }
+
+
+  // In your component class
+  addOtraEspecialidad(): void {
+    const nuevaEspecialidad = this.formRegistro.get('otraEspecialidad')!.value;
+
+    // Check if the nuevaEspecialidad is not already in the array
+    if (nuevaEspecialidad && !this.especialidades.includes(nuevaEspecialidad)) {
+      this.especialidades.unshift(nuevaEspecialidad);
+
+      this.formRegistro.get('especialidad')!.setValue(nuevaEspecialidad);
+      this.formRegistro.get('otraEspecialidad')!.setValue('');
     }
   }
-
 
   imagenA_change(event: any) {
     const archivo = event.target.files[0];
@@ -192,7 +268,7 @@ export class FormRegistroComponent implements OnChanges   {
     };
   }
 
-  async  onSubmit(): Promise<void> {
+  async onSubmit(): Promise<void> {
     if (this.formRegistro.valid) {
       this.spinner.show();
       const data: { [key: string]: any } = {
@@ -206,7 +282,10 @@ export class FormRegistroComponent implements OnChanges   {
 
       const imgs: { [key: string]: any } = {
         imagen_a: this.imagen_a.value.name,
-        imagen_a_file: this.imagenAFile instanceof Observable ? await this.imagenAFile.toPromise() : this.imagenAFile
+        imagen_a_file:
+          this.imagenAFile instanceof Observable
+            ? await this.imagenAFile.toPromise()
+            : this.imagenAFile,
       };
 
       if (this.tipoUsuario === 'paciente') {
@@ -215,16 +294,20 @@ export class FormRegistroComponent implements OnChanges   {
         data['rol'] = 'paciente';
 
         imgs['imagen_b'] = this.imagen_b.value.name;
-        imgs['imagen_b_file'] = this.imagenBFile instanceof Observable ? await this.imagenBFile.toPromise() : this.imagenBFile;
+        imgs['imagen_b_file'] =
+          this.imagenBFile instanceof Observable
+            ? await this.imagenBFile.toPromise()
+            : this.imagenBFile;
       }
 
       if (this.tipoUsuario === 'especialista') {
-        if (this.especialidad.value == 'Otra') {
-          data['especialidad'] = this.otraEspecialidad.value;
-        }
-        else {
-          data['especialidad'] = this.especialidad.value;
-        }
+        const especialidades = Array.isArray(
+          this.formRegistro.get('especialidad')!.value
+        )
+          ? this.formRegistro.get('especialidad')!.value
+          : [this.formRegistro.get('especialidad')!.value];
+
+        data['especialidad'] = especialidades;
         data['rol'] = 'especialista';
         data['verificado'] = 'f';
       }
@@ -233,23 +316,27 @@ export class FormRegistroComponent implements OnChanges   {
         data['rol'] = 'admin';
       }
 
-      this.authService.registerUser(this.email.value, this.password.value, data, imgs)
-      .then(() => {
-        this.spinner.hide();
-        Swal.fire("Registro exitoso! Se envió una verificación adicional a su correo electrónico.");
-        // if (this.usuarioLogeado) {
-        //   this.router.navigateByUrl('usuarios');
-        // }
-        // else {
+      console.log(data);
+
+      this.authService
+        .registerUser(this.email.value, this.password.value, data, imgs)
+        .then(() => {
+          this.spinner.hide();
+          Swal.fire(
+            'Registro exitoso! Se envió una verificación adicional a su correo electrónico.'
+          );
+          // if (this.usuarioLogeado) {
+          //   this.router.navigateByUrl('usuarios');
+          // }
+          // else {
           this.router.navigateByUrl('bienvenida');
-        //}
-      })
-      .catch((error) => {
-        this.spinner.hide();
-        Swal.fire(error.message);
-        console.error('Error registering user:', error);
-      });
+          //}
+        })
+        .catch((error) => {
+          this.spinner.hide();
+          Swal.fire(error.message);
+          console.error('Error registering user:', error);
+        });
     }
   }
-
 }

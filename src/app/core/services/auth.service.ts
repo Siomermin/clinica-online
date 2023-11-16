@@ -93,14 +93,18 @@ export class AuthService {
         return this.getUserData().pipe(
           switchMap((userData) => {
             // Check if the email is verified
-            if (!user?.emailVerified) {
-              throw Error('Debes verificar tu email para poder ingresar!!');
+
+            if(!userData!['test']) {
+              if (!user?.emailVerified) {
+                throw Error('Debes verificar tu email para poder ingresar!!');
+              }
+
+              // Check the user's role and verification status
+              if (userData!['rol'] === 'especialista' && userData!['verificado'] === 'f') {
+                throw Error('El usuario no esta habilitado por un admin para ingresar!!');
+              }
             }
 
-            // Check the user's role and verification status
-            if (userData!['rol'] === 'especialista' && userData!['verificado'] === 'f') {
-              throw Error('El usuario no esta habilitado por un admin para ingresar!!');
-            }
 
             // For example, you can return a success message
             return 'Login successful';

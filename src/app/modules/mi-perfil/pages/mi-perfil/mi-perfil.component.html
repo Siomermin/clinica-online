@@ -1,39 +1,64 @@
 <div class="container p-5">
   <!-- <app-button-volver></app-button-volver> -->
   <div class="row justify-content-center">
-    <img [src]="usuarioLogeado?.imagen_a_url" class="rounded-circle p-0 m-2">
-    <img *ngIf="usuarioLogeado?.rol === 'paciente'" [src]="usuarioLogeado?.imagen_b_url" class="rounded-circle p-0 m-2">
+    <img [src]="usuarioLogeado?.imagen_a_url" class="rounded-circle p-0 m-2" />
+    <img
+      *ngIf="usuarioLogeado?.rol === 'paciente'"
+      [src]="usuarioLogeado?.imagen_b_url"
+      class="rounded-circle p-0 m-2"
+    />
   </div>
   <div class="row justify-content-center my-3">
     <ul class="list-group list-group-light col-md-4">
-      <li class="list-group-item d-flex justify-content-between align-items-center">
+      <li
+        class="list-group-item d-flex justify-content-between align-items-center"
+      >
         <div>
           <div class="fw-bold">Nombre y apellido</div>
-          <div class="text-muted">{{ usuarioLogeado?.nombre }} {{ usuarioLogeado?.apellido }}</div>
+          <div class="text-muted">
+            {{ usuarioLogeado?.nombre }} {{ usuarioLogeado?.apellido }}
+          </div>
         </div>
       </li>
-      <li class="list-group-item d-flex justify-content-between align-items-center">
+      <li
+        class="list-group-item d-flex justify-content-between align-items-center"
+      >
         <div>
           <div class="fw-bold">Edad</div>
           <div class="text-muted">{{ usuarioLogeado?.edad }}</div>
         </div>
       </li>
-      <li class="list-group-item d-flex justify-content-between align-items-center">
+      <li
+        class="list-group-item d-flex justify-content-between align-items-center"
+      >
         <div>
           <div class="fw-bold">Correo electrónico</div>
           <div class="text-muted">{{ usuarioLogeado?.email }}</div>
         </div>
       </li>
-      <li *ngIf="usuarioLogeado?.obraSocial" class="list-group-item d-flex justify-content-between align-items-center">
+      <li
+        *ngIf="usuarioLogeado?.obraSocial"
+        class="list-group-item d-flex justify-content-between align-items-center"
+      >
         <div>
           <div class="fw-bold">Obra social</div>
           <div class="text-muted">{{ usuarioLogeado?.obraSocial }}</div>
         </div>
       </li>
-      <li *ngIf="usuarioLogeado?.especialidad" class="list-group-item d-flex justify-content-between align-items-center">
+      <li
+        *ngIf="usuarioLogeado?.especialidad"
+        class="list-group-item d-flex justify-content-between align-items-center"
+      >
         <div>
-          <div class="fw-bold">Especialidad</div>
+          <div class="fw-bold">Especialidad/es</div>
           <div class="text-muted">{{ usuarioLogeado?.especialidad }}</div>
+        </div>
+      </li>
+      <li *ngIf="usuarioLogeado.rol === 'especialista'"
+        class="list-group-item d-flex justify-content-between align-items-center"
+      >
+        <div class="horarios-container row justify-content-center my-3">
+          <div class="fw-bold">Horarios</div>
         </div>
       </li>
     </ul>

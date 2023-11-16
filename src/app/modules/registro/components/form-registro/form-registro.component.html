@@ -2,12 +2,14 @@
   <div class="row mb-1">
     <div class="text-start my-2 input col-md-6">
       <input class="form-control" type="text" id="nombre" formControlName="nombre" name="nombre" placeholder="Nombre">
-      <small class="text-danger" *ngIf="nombre?.touched && nombre?.errors">Ingrese un nombre.</small>
+      <small class="text-danger" *ngIf="nombre?.touched && nombre?.hasError('required')">Ingrese un nombre.</small>
+      <small class="text-danger" *ngIf="nombre?.touched && nombre?.hasError('invalidCharacters')">Ingrese solo letras y espacios.</small>
     </div>
 
     <div class="text-start my-2 input col-md-6">
       <input class="form-control" type="text" id="apellido" formControlName="apellido" name="apellido" placeholder="Apellido">
-      <small class="text-danger" *ngIf="apellido?.touched && apellido?.errors">Ingrese un apellido.</small>
+      <small class="text-danger" *ngIf="apellido?.touched && apellido?.hasError('required')">Ingrese un apellido.</small>
+      <small class="text-danger" *ngIf="apellido?.touched && apellido?.hasError('invalidCharacters')">Ingrese solo letras y espacios.</small>
     </div>
   </div>
 
@@ -40,20 +42,24 @@
   <ng-container *ngIf="tipoUsuario === 'especialista'">
     <div class="text-start my-2 input col-md-12">
       <label class="text-muted" for="especialidad">Especialidad</label>
-      <select formControlName="especialidad" class="form-select" id="especialidad" (change)="onEspecialidadChange($event)">
-        <option value="Odontologia">Odontologia</option>
-        <option value="Pediatria">Pediatria</option>
-        <option value="Oftamologia">Oftamologia</option>
-        <option value="Otra">Otra</option>
+      <select formControlName="especialidad" class="form-select" id="especialidad" multiple>
+        <option *ngFor="let especialidad of especialidades" [value]="especialidad">{{ especialidad }}</option>
       </select>
 
-      <input *ngIf="especialidad.value === 'Otra'" formControlName="otraEspecialidad" type="text" class="form-control my-2" placeholder="Ingrese su especialidad">
+      <input  formControlName="otraEspecialidad" type="text" class="form-control my-2" placeholder="Ingrese su especialidad" (keyup.enter)="addOtraEspecialidad()">
 
-      <small class="text-danger" *ngIf="especialidad?.touched && especialidad?.errors">
+      <small class="text-danger" *ngIf="formRegistro.get('especialidad')!.hasError('maxOptionsExceeded')">
+        Maximo 2 especialidades.
+      </small>
+
+      <small class="text-danger" *ngIf="formRegistro.get('especialidad')?.touched && formRegistro.get('especialidad')?.errors && !formRegistro.get('especialidad')?.hasError('maxOptionsExceeded')">
         Ingrese una opción
       </small>
+
     </div>
   </ng-container>
+
+
 
     <ng-container *ngIf="tipoUsuario === 'paciente'">
       <div class="text-start my-2 input col-md-12">
