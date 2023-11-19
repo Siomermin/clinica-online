@@ -1,5 +1,4 @@
 <div class="container p-5">
-  <!-- <app-button-volver></app-button-volver> -->
   <div class="row justify-content-center">
     <img [src]="usuarioLogeado?.imagen_a_url" class="rounded-circle p-0 m-2" />
     <img
@@ -54,13 +53,42 @@
           <div class="text-muted">{{ usuarioLogeado?.especialidad }}</div>
         </div>
       </li>
-      <li *ngIf="usuarioLogeado.rol === 'especialista'"
-        class="list-group-item d-flex justify-content-between align-items-center"
-      >
-        <div class="horarios-container row justify-content-center my-3">
-          <div class="fw-bold">Horarios</div>
-        </div>
-      </li>
     </ul>
+  </div>
+</div>
+
+<div *ngIf="usuarioLogeado?.rol === 'especialista'">
+  <div>
+    <div class="fw-bold">Horarios</div>
+    <div *ngFor="let esp of usuarioLogeado?.especialidad">
+      <button
+        class="btn"
+        [ngClass]="{
+            'btn-danger': esp === usuarioLogeado?.especialidad[0],
+            'btn-warning': esp === usuarioLogeado?.especialidad[1],
+          }"
+      >
+        {{ esp }}
+      </button>
+    </div>
+  </div>
+
+  <div *ngFor="let entry of horarios?.horarios; let i = index">
+    <button
+      (click)="getEspecialidad(entry.dia)"
+      class="btn"
+      [ngClass]="{
+          'btn-danger': assignedEspecialidades[entry.dia] === usuarioLogeado?.especialidad[0],
+          'btn-warning': assignedEspecialidades[entry.dia] === usuarioLogeado?.especialidad[1],
+        }"
+    >
+      {{ entry.dia }}
+    </button>
+
+    <select  [(ngModel)]="entry.turno" (change)="updateTurno(entry)">
+      <option value="Mañana">Mañana (08:00 - 13:00)</option>
+      <option value="Tarde">Tarde (13:00 - 19:00)</option>
+      <option value="Completo">Completo (08:00 - 19:00)</option>
+    </select>
   </div>
 </div>

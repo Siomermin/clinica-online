@@ -4,16 +4,28 @@ import { FirestoreService } from './firestore.service';
 import { AngularFireStorage } from '@angular/fire/compat/storage';
 import { Observable, from, of, throwError } from 'rxjs';
 import { switchMap, map } from 'rxjs/operators'; // Corrected import for operators
+import { HorarioService } from './horario.service';
 
 @Injectable({
   providedIn: 'root',
 })
 export class AuthService {
-  constructor(private afAuth: AngularFireAuth, private afs: FirestoreService, private afStorage: AngularFireStorage) {}
+  constructor(
+    private afAuth: AngularFireAuth,
+    private afs: FirestoreService,
+    private afStorage: AngularFireStorage,
+    private horarioService: HorarioService
+  ) {}
 
-  async registerUser(email: string, password: string, userData: any, imgs: any) {
+  async registerUser(
+    email: string,
+    password: string,
+    userData: any,
+    imgs: any
+  ) {
     try {
-      const userCredential: any = await this.afAuth.createUserWithEmailAndPassword(email, password);
+      const userCredential: any =
+        await this.afAuth.createUserWithEmailAndPassword(email, password);
       const user = userCredential.user;
 
       // Include the UID in the data to be uploaded to Firestore
@@ -43,6 +55,22 @@ export class AuthService {
       // Save userData to Firestore
       await this.afs.setUsuario(userData);
 
+      if (userData.rol === 'especialista') {
+        const horarios = [
+          { dia: 'Lunes', especialidad: '', turno: 'Completo' },
+          { dia: 'Martes', especialidad: '', turno: 'Completo' },
+          { dia: 'Miércoles', especialidad: '', turno: 'Completo' },
+          { dia: 'Jueves', especialidad: '', turno: 'Completo' },
+          { dia: 'Viernes', especialidad: '', turno: 'Completo' },
+          { dia: 'Sábado', especialidad: '', turno: 'Completo' },
+        ];
+
+        const especialista = userData.email;
+        const horariosConEspecialista = { especialista, horarios };
+
+        this.horarioService.setHorario(horariosConEspecialista);
+      }
+
       // Send email verification and return the observable
       const sendEmailVerificationObservable = user.sendEmailVerification();
 
@@ -57,8 +85,6 @@ export class AuthService {
     }
   }
 
-
-
   async uploadImages(userId: string, imgs: any): Promise<string[]> {
     const downloadUrls: string[] = [];
 
@@ -67,7 +93,9 @@ export class AuthService {
       if (imgs.imagen_a) {
         const pathImgA = `userImgs/${userId}/${imgs.imagen_a}`;
         await this.afStorage.upload(pathImgA, imgs.imagen_a_file);
-        const downloadUrlA = await this.afStorage.ref(pathImgA).getDownloadURL();
+        const downloadUrlA = await this.afStorage
+          .ref(pathImgA)
+          .getDownloadURL();
         downloadUrls.push(downloadUrlA as unknown as string);
       }
 
@@ -75,7 +103,9 @@ export class AuthService {
       if (imgs.imagen_b) {
         const pathImgB = `userImgs/${userId}/${imgs.imagen_b}`;
         await this.afStorage.upload(pathImgB, imgs.imagen_b_file);
-        const downloadUrlB = await this.afStorage.ref(pathImgB).getDownloadURL();
+        const downloadUrlB = await this.afStorage
+          .ref(pathImgB)
+          .getDownloadURL();
         downloadUrls.push(downloadUrlB as unknown as string);
       }
 
@@ -93,18 +123,28 @@ export class AuthService {
         return this.getUserData().pipe(
           switchMap((userData) => {
             // Check if the email is verified
+            console.log(userData);
+            if (userData) {
+              if (userData!['test'] == 'f') {
+                if (!user?.emailVerified) {
+                  throw Error('Debes verificar tu email para poder ingresar!!');
+                }
 
-            if(!userData!['test']) {
-              if (!user?.emailVerified) {
-                throw Error('Debes verificar tu email para poder ingresar!!');
+                // Check the user's role and verification status
+                if (
+                  userData['rol'] === 'especialista' &&
+                  userData['verificado'] === 'f'
+                ) {
+                  throw Error(
+                    'El usuario no esta habilitado por un admin para ingresar!!'
+                  );
+                }
               }
-
-              // Check the user's role and verification status
-              if (userData!['rol'] === 'especialista' && userData!['verificado'] === 'f') {
-                throw Error('El usuario no esta habilitado por un admin para ingresar!!');
-              }
+            } else {
+              throw Error(
+                'Usuario no registrado'
+              );
             }
-
 
             // For example, you can return a success message
             return 'Login successful';
@@ -133,7 +173,6 @@ export class AuthService {
       })
     );
   }
-
 
   getLoggedUser() {
     return this.afAuth.authState;

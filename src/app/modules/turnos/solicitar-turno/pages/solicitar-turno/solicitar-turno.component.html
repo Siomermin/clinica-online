@@ -1,11 +1,18 @@
 <div class="container">
   <app-lista-especialistas-turno (especialistaSeleccionado)="onEspecialistaSeleccionado($event)"></app-lista-especialistas-turno>
 
+
   <ng-container *ngIf="especialista">
+    <app-lista-especialidades (especialidadSeleccionada)="onEspecialidadSeleccionada($event)" [especialistaSeleccionado]="especialista"></app-lista-especialidades>
+  </ng-container>
+
+
+  <ng-container *ngIf="especialista && especialidad" >
     <!-- Your template for the selected especialista -->
 
     <!-- Show ListaHorariosTurnoComponent only if there is a selected especialista -->
     <app-lista-horarios-turno [especialistaSeleccionado]="especialista"
+                              [especialidadSeleccionada]="especialidad"
                               (fechaHoraSeleccionada)="onFechaHoraSeleccionada($event)">
     </app-lista-horarios-turno>
 

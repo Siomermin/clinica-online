@@ -39,6 +39,18 @@ export class TurnoService {
     return collectionData<any>(q, { idField: 'id' }) as Observable<Array<any>>;
   }
 
+  getTurnosPorEspecialistaYEspecialidad(especialista: string, especialidad: string): Observable<Array<any>> {
+    const q = query(
+      this.coleccion,
+      where('especialista', '==', especialista),
+      where('especialidad', '==', especialidad)
+    );
+
+    // Fetching data from Firestore using the created query and explicitly defining the type
+    return collectionData<any>(q, { idField: 'id' }) as Observable<Array<any>>;
+  }
+
+
   setTurno(turno: any): Promise<DocumentReference<any>> {
     return addDoc(this.coleccion, { ...turno });
   }

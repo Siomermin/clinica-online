@@ -12,6 +12,8 @@ import Swal from 'sweetalert2';
 export class SolicitarTurnoComponent {
   paciente: any;
   especialista: any;
+  especialidad: any;
+
   fechaSeleccionada!: Date;
   horaSeleccionada!: Date;
 
@@ -36,6 +38,12 @@ export class SolicitarTurnoComponent {
     console.log('Especialista seleccionado:', this.especialista);
   }
 
+  onEspecialidadSeleccionada(seleccionado: any): void {
+    this.especialidad = seleccionado;
+    // You can perform additional actions based on the selected especialista
+    console.log('Especialidad seleccionado:', this.especialidad);
+  }
+
   onFechaHoraSeleccionada(event: { fecha: Date, hora: Date }): void {
     this.fechaSeleccionada = event.fecha;
     this.horaSeleccionada = event.hora;
@@ -54,7 +62,7 @@ export class SolicitarTurnoComponent {
     const turno = {
       paciente: this.paciente.email,
       especialista: this.especialista.email,
-      especialidad: this.especialista.especialidad,
+      especialidad: this.especialidad,
       fecha: fechaTurno,
       estado: 'Solicitado'
     }

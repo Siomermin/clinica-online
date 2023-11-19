@@ -79,6 +79,9 @@ export class FormLoginComponent implements OnDestroy {
           else if (error.message === 'Usuario no habilitado') {
             Swal.fire('Su usuario no esta hablitado por un admin para ingresar!');
           }
+          else if (error.message === 'Usuario no registrado') {
+            Swal.fire('Su usuario no esta hablitado por un admin para ingresar!');
+          }
           else {
             Swal.fire(error.message);
           }
