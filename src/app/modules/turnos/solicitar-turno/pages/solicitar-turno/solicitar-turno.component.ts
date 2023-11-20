@@ -10,6 +10,8 @@ import Swal from 'sweetalert2';
   styleUrls: ['./solicitar-turno.component.scss']
 })
 export class SolicitarTurnoComponent {
+
+  usuarioLogeado: any;
   paciente: any;
   especialista: any;
   especialidad: any;
@@ -23,13 +25,20 @@ export class SolicitarTurnoComponent {
    this.authService.getUserData().subscribe(user => {
       // Perform actions with the user object, e.g., check if the user is logged in
       if (user) {
-        this.paciente = user;
+        this.usuarioLogeado = user;
         console.log('User is logged in:', user);
       } else {
         console.log('User is not logged in');
       }
     });
-    console.log(this.paciente);
+    console.log(this.usuarioLogeado);
+  }
+
+
+  onPacienteSeleccionado(seleccionado: any): void {
+    this.paciente = seleccionado;
+    // You can perform additional actions based on the selected paciente
+    console.log('Paciente seleccionado:', this.paciente);
   }
 
   onEspecialistaSeleccionado(seleccionado: any): void {
@@ -57,7 +66,9 @@ export class SolicitarTurnoComponent {
     fechaTurno.setMinutes(this.horaSeleccionada.getMinutes());
     fechaTurno.setSeconds(0);
 
-    // const turno = new Turno(this.paciente.mail, this.especialista.mail, this.especialidad, this.fecha);
+    if (!this.paciente) {
+      this.paciente = this.usuarioLogeado;
+    }
 
     const turno = {
       paciente: this.paciente.email,

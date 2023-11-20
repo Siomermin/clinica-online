@@ -6,6 +6,7 @@ import { SolicitarTurnoComponent } from './pages/solicitar-turno/solicitar-turno
 import { ListaEspecialistasTurnoComponent } from './components/lista-especialistas-turno/lista-especialistas-turno.component';
 import { ListaHorariosTurnoComponent } from './components/lista-horarios-turno/lista-horarios-turno.component';
 import { ListaEspecialidadesComponent } from './components/lista-especialidades/lista-especialidades.component';
+import { ListaPacientesComponent } from './components/lista-pacientes/lista-pacientes.component';
 
 
 @NgModule({
@@ -13,7 +14,8 @@ import { ListaEspecialidadesComponent } from './components/lista-especialidades/
     SolicitarTurnoComponent,
     ListaEspecialistasTurnoComponent,
     ListaHorariosTurnoComponent,
-    ListaEspecialidadesComponent
+    ListaEspecialidadesComponent,
+    ListaPacientesComponent
   ],
   imports: [
     CommonModule,

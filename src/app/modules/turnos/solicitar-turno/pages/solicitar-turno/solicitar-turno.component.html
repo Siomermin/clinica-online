@@ -1,26 +1,39 @@
 <div class="container">
-  <app-lista-especialistas-turno (especialistaSeleccionado)="onEspecialistaSeleccionado($event)"></app-lista-especialistas-turno>
-
-
-  <ng-container *ngIf="especialista">
-    <app-lista-especialidades (especialidadSeleccionada)="onEspecialidadSeleccionada($event)" [especialistaSeleccionado]="especialista"></app-lista-especialidades>
+  <ng-container *ngIf="usuarioLogeado?.rol == 'admin'">
+    <app-lista-pacientes
+      (pacienteSeleccionado)="onPacienteSeleccionado($event)"
+    ></app-lista-pacientes>
   </ng-container>
 
+  <ng-container *ngIf="paciente || usuarioLogeado?.rol != 'admin'">
+    <app-lista-especialistas-turno
+      (especialistaSeleccionado)="onEspecialistaSeleccionado($event)"
+    ></app-lista-especialistas-turno>
+  </ng-container>
 
-  <ng-container *ngIf="especialista && especialidad" >
-    <!-- Your template for the selected especialista -->
+  <ng-container *ngIf="especialista">
+    <app-lista-especialidades
+      (especialidadSeleccionada)="onEspecialidadSeleccionada($event)"
+      [especialistaSeleccionado]="especialista"
+    ></app-lista-especialidades>
+  </ng-container>
 
-    <!-- Show ListaHorariosTurnoComponent only if there is a selected especialista -->
-    <app-lista-horarios-turno [especialistaSeleccionado]="especialista"
-                              [especialidadSeleccionada]="especialidad"
-                              (fechaHoraSeleccionada)="onFechaHoraSeleccionada($event)">
+  <ng-container *ngIf="especialista && especialidad">
+
+    <app-lista-horarios-turno
+      [especialistaSeleccionado]="especialista"
+      [especialidadSeleccionada]="especialidad"
+      (fechaHoraSeleccionada)="onFechaHoraSeleccionada($event)"
+    >
     </app-lista-horarios-turno>
 
-    <!-- Enable the button only if especialista, fechaSeleccionada, and horaSeleccionada have values -->
     <div class="row">
-      <button type="button" class="btn btn-success btn-lg btn-block"
-              [disabled]="!especialista || !fechaSeleccionada || !horaSeleccionada"
-              (click)="solicitarTurno()">
+      <button
+        type="button"
+        class="btn btn-success btn-lg btn-block"
+        [disabled]="!especialista || !fechaSeleccionada || !horaSeleccionada"
+        (click)="solicitarTurno()"
+      >
         Solicitar turno
       </button>
     </div>
