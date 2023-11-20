@@ -6,6 +6,14 @@
     [ngClass]="{ selected: seleccionado(especialidad) }"
   >
     <a class="h-100" (click)="seleccionarEspecialidad(especialidad)">
+      <!-- Use ngIf to check the value of especialidad and set the image source accordingly -->
+      <img
+        [src]="getImagen(especialidad)"
+        loading="lazy"
+        class="col btn rounded-circle p-0 m-4"
+        height="80"
+        width="80"
+      />
 
       <p>{{ especialidad }}</p>
     </a>

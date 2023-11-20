@@ -6,6 +6,7 @@ import { MisTurnosRoutingModule } from './mis-turnos-routing.module';
 import { MisTurnosComponent } from './pages/mis-turnos/mis-turnos.component';
 import { TurnosListComponent } from './components/turnos-list/turnos-list.component';
 import { AccionesTurnoComponent } from './components/acciones-turno/acciones-turno.component';
+import { FormsModule } from '@angular/forms';
 
 
 @NgModule({
@@ -16,7 +17,8 @@ import { AccionesTurnoComponent } from './components/acciones-turno/acciones-tur
   ],
   imports: [
     CommonModule,
-    MisTurnosRoutingModule
+    MisTurnosRoutingModule,
+    FormsModule
   ],
   providers: [DatePipe],
 })

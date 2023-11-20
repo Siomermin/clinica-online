@@ -1,4 +1,5 @@
 import { Component } from '@angular/core';
+import { Router } from '@angular/router';
 import { NgxSpinnerService } from 'ngx-spinner';
 import { AuthService } from 'src/app/core/services/auth.service';
 import { TurnoService } from 'src/app/core/services/turno.service';
@@ -19,7 +20,7 @@ export class SolicitarTurnoComponent {
   fechaSeleccionada!: Date;
   horaSeleccionada!: Date;
 
-  constructor(private authService: AuthService, private turnoService: TurnoService, private spinner: NgxSpinnerService) {}
+  constructor(private authService: AuthService, private turnoService: TurnoService, private spinner: NgxSpinnerService, private router: Router) {}
 
   ngOnInit(): void {
    this.authService.getUserData().subscribe(user => {
@@ -83,8 +84,8 @@ export class SolicitarTurnoComponent {
     this.turnoService.setTurno(turno)
     .then(() => {
       this.spinner.hide();
-      Swal.fire("Turno registrado!.");
-
+      Swal.fire("Turno registrado!");
+      this.router.navigateByUrl('home');
     })
     .catch((error) => {
       this.spinner.hide();

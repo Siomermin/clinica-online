@@ -1,3 +1,10 @@
+<div class="mb-3">
+  <label *ngIf="this.usuarioLogeado.rol != 'especialista'" for="searchInput" class="form-label">Buscar por Especialidad o Especialista:</label>
+  <label *ngIf="this.usuarioLogeado.rol == 'especialista'" for="searchInput" class="form-label">Buscar por Especialidad o Paciente:</label>
+
+  <input type="text" class="form-control" id="searchInput" [(ngModel)]="terminoBusqueda" placeholder="Ingrese término de búsqueda" (input)="buscar()">
+</div>
+
 <table class="table align-middle mb-0 bg-white">
   <thead class="bg-light">
     <tr>
@@ -54,26 +61,23 @@
           <span *ngSwitchCase="'Solicitado'" class="d-inline text-primary">{{
             turno.estado
           }}</span>
-          <span
-            *ngSwitchCase="'Aceptado'"
-            class="badge badge-success rounded-pill d-inline"
-            >{{ turno.estado }}</span
-          >
-          <span
-            *ngSwitchCase="'Rechazado'"
-            class="badge badge-danger rounded-pill d-inline"
-            >{{ turno.estado }}</span
-          >
-          <span
-            *ngSwitchCase="'Realizado'"
-            class="badge badge-info rounded-pill d-inline"
-            >{{ turno.estado }}</span
-          >
+          <span *ngSwitchCase="'Aceptado'" class="d-inline text-success">{{
+            turno.estado
+          }}</span>
+          <span *ngSwitchCase="'Cancelado'" class="d-inline text-danger">{{
+            turno.estado
+          }}</span>
+          <span *ngSwitchCase="'Rechazado'" class="d-inline text-danger">{{
+            turno.estado
+          }}</span>
+          <span *ngSwitchCase="'Finalizado'" class="d-inline text-warning">{{
+            turno.estado
+          }}</span>
         </h5>
       </td>
 
-       <td>
-        <app-acciones-turno [turno]="turno"></app-acciones-turno>
+      <td>
+        <app-acciones-turno [usuarioLogeado]="this.usuarioLogeado" [turno]="turno"></app-acciones-turno>
       </td>
     </tr>
   </tbody>
