@@ -5,6 +5,8 @@ import { UsuariosRoutingModule } from './usuarios-routing.module';
 import { UsuariosComponent } from './pages/usuarios/usuarios.component';
 import { ListaPacientesComponent } from './components/lista-pacientes/lista-pacientes.component';
 import { ListaEspecialistasComponent } from './components/lista-especialistas/lista-especialistas.component';
+import { MatDialogModule } from '@angular/material/dialog';
+import { HistoriaClinicaModule } from '../historia-clinica/historia-clinica.module';
 
 
 @NgModule({
@@ -15,7 +17,9 @@ import { ListaEspecialistasComponent } from './components/lista-especialistas/li
   ],
   imports: [
     CommonModule,
-    UsuariosRoutingModule
+    UsuariosRoutingModule,
+    HistoriaClinicaModule,
+    MatDialogModule,
   ]
 })
 export class UsuariosModule { }

@@ -1,0 +1,11 @@
+/* historia-clinica.component.scss */
+.text-center {
+  display: flex;
+  flex-direction: column;
+}
+
+.close-button {
+  margin-left: auto; /* Push the button to the right */
+  margin-top: 1rem; /* Adjust the top margin as needed */
+  margin-right: 1rem;
+}

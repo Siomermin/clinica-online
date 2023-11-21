@@ -1,6 +1,7 @@
 import { Component } from '@angular/core';
 import { AuthService } from '../../../../core/services/auth.service';
 import { HorarioService } from 'src/app/core/services/horario.service';
+import { HistoriaClinicaService } from 'src/app/core/services/historia-clinica.service';
 
 @Component({
   selector: 'app-mi-perfil',
@@ -10,6 +11,7 @@ import { HorarioService } from 'src/app/core/services/horario.service';
 export class MiPerfilComponent {
   usuarioLogeado: any;
   horarios: any;
+  historiaClinica: any;
   assignedEspecialidades: { [day: string]: string } = {};
 
   constructor(private authService: AuthService, private horarioService: HorarioService) {}
@@ -26,6 +28,7 @@ export class MiPerfilComponent {
             console.log(this.horarios);
           }
         });
+
       }
     });
   }

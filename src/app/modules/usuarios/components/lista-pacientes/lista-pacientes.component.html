@@ -4,6 +4,7 @@
       <th>Nombre</th>
       <th>Correo Electronico</th>
       <th>Obra Social</th>
+      <th></th>
     </tr>
   </thead>
   <tbody>
@@ -22,6 +23,12 @@
       <td>
         <p class="fw-normal mb-1">{{ usuario.obra_social }}</p>
       </td>
+      <td>
+        <button class="btn btn-primary" (click)="openHistoriaClinicaDialog(usuario)">
+          Historia clinica
+        </button>
+      </td>
+
     </tr>
   </tbody>
 </table>

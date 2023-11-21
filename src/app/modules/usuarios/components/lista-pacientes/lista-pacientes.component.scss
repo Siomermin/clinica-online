@@ -1,0 +1,11 @@
+/* historia-clinica.component.scss */
+:host {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100%;
+}
+
+.text-center {
+  width: 80%; /* Adjust the width as needed */
+}

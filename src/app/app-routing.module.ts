@@ -1,4 +1,4 @@
-import { NgModule, Component } from '@angular/core';
+import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 import { BienvenidaComponent } from './core/pages/bienvenida/bienvenida.component';
 
@@ -43,6 +43,10 @@ const routes: Routes = [
   {
     path: 'mis-turnos',
     loadChildren: () => import('./modules/turnos/mis-turnos/mis-turnos.module').then(m => m.MisTurnosModule),
+  },
+  {
+    path: 'pacientes',
+    loadChildren: () => import('./modules/historia-clinica/historia-clinica.module').then(m => m.HistoriaClinicaModule),
   },
 ];
 

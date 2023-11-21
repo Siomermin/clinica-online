@@ -4,6 +4,7 @@ import { RouterModule, Routes } from '@angular/router';
 import { UsuariosComponent } from './pages/usuarios/usuarios.component';
 import { ListaEspecialistasComponent } from './components/lista-especialistas/lista-especialistas.component';
 import { ListaPacientesComponent } from './components/lista-pacientes/lista-pacientes.component';
+import { HistoriaClinicaComponent } from '../historia-clinica/components/historia-clinica/historia-clinica.component';
 
 const routes: Routes = [
   {
@@ -20,7 +21,14 @@ const routes: Routes = [
       {
         path: 'pacientes',
         component: ListaPacientesComponent,
+        children: [
+          {
+            path: 'historia-clinica',
+            component: HistoriaClinicaComponent,
+          },
+        ]
       },
+
     ]
   }
 ];

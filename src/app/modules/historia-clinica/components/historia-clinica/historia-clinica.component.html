@@ -1,0 +1,21 @@
+<div class="text-center">
+  <button class="btn btn-danger close-button" (click)="closeDialog()">X</button>
+  <h3 class="fw-bold">Historia clínica {{usuarioLogeado?.nombre}}</h3>
+  <hr>
+  <ng-container *ngIf="historiaClinica && historiaClinica.length; else noData">
+    <!-- Display data when historiaClinica is not empty -->
+    <div *ngFor="let historia of historiaClinica">
+      <div *ngFor="let item of historia | keyvalue">
+        <div *ngIf="item.key !== 'id'">
+          <span class="fw-bold">{{ item.key }}:</span> {{ item.value }}
+        </div>
+      </div>
+      <hr /> <!-- Optional: Add a separator between sets of key-value pairs -->
+    </div>
+  </ng-container>
+
+  <!-- Display this message when historiaClinica is empty -->
+  <ng-template #noData>
+    <p class="text-danger">No hay Historia clínica disponible.</p>
+  </ng-template>
+</div>

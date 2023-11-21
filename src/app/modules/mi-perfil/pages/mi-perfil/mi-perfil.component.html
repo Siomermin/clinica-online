@@ -57,6 +57,10 @@
   </div>
 </div>
 
+<div *ngIf="usuarioLogeado?.rol === 'paciente'">
+  <app-historia-clinica-tabla></app-historia-clinica-tabla>
+</div>
+
 <div *ngIf="usuarioLogeado?.rol === 'especialista'">
   <div>
     <div class="fw-bold">Horarios</div>
@@ -85,7 +89,7 @@
       {{ entry.dia }}
     </button>
 
-    <select  [(ngModel)]="entry.turno" (change)="updateTurno(entry)">
+    <select [(ngModel)]="entry.turno" (change)="updateTurno(entry)">
       <option value="Mañana">Mañana (08:00 - 13:00)</option>
       <option value="Tarde">Tarde (13:00 - 19:00)</option>
       <option value="Completo">Completo (08:00 - 19:00)</option>

@@ -1,0 +1,27 @@
+<div class="text-center mt-5">
+
+  <h3 *ngIf="this.usuarioLogeado?.rol == 'especialista'" class="fw-bold">Historias clínicas Pacientes</h3>
+  <h3 *ngIf="this.usuarioLogeado?.rol == 'paciente'" class="fw-bold">Historia clínica</h3>
+
+  <hr>
+  <ng-container *ngIf="historiaClinica && historiaClinica.length; else noData">
+    <!-- Display data when historiaClinica is not empty -->
+    <div *ngFor="let historia of historiaClinica">
+      <div *ngFor="let item of historia | keyvalue">
+        <div *ngIf="item.key !== 'id'">
+          <!-- <div *ngIf="item.key !== 'especialista'">
+            <div *ngIf="item.key !== 'paciente'"> -->
+            <span class="fw-bold">{{ item.key }}:</span> {{ item.value }}
+            <!-- </div>
+          </div> -->
+        </div>
+      </div>
+      <hr /> <!-- Optional: Add a separator between sets of key-value pairs -->
+    </div>
+  </ng-container>
+
+  <!-- Display this message when historiaClinica is empty -->
+  <ng-template #noData>
+    <p class="text-danger">No hay Historia clínica disponible.</p>
+  </ng-template>
+</div>
