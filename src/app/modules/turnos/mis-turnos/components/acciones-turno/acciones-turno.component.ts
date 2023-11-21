@@ -23,7 +23,6 @@ export class AccionesTurnoComponent {
   constructor(private turnoService: TurnoService, private historiaService: HistoriaClinicaService) {}
 
   ngOnInit(): void {
-    console.log(this.turno);
     this.turnoCopia = this.turno;
   }
 
@@ -98,10 +97,10 @@ export class AccionesTurnoComponent {
           });
 
           if (result.value) {
-            console.log(result.value);
 
             this.turnoCopia.resenia = result.value;
             this.turnoCopia.estado = estado;
+            this.turnoCopia.historiaClinica = [historiaClinica];
             this.turnoService.updateTurno(this.turnoCopia);
             this.historiaService.setHistoriaClinica(historiaClinica);
           }
@@ -122,7 +121,6 @@ export class AccionesTurnoComponent {
           showCancelButton: true,
         }).then((result) => {
           if (result.value) {
-            console.log(result.value);
 
             this.turnoCopia.resenia = result.value;
             this.turnoCopia.estado = estado;
@@ -150,7 +148,6 @@ export class AccionesTurnoComponent {
       showCancelButton: true,
     }).then((result) => {
       if (result.value) {
-        console.log(result.value);
 
         this.turnoCopia.atencion = result.value;
         this.turnoService.updateTurno(this.turnoCopia);

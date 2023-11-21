@@ -4,6 +4,7 @@ import { DatePipe } from '@angular/common';
 import { FirestoreService } from 'src/app/core/services/firestore.service';
 import { take } from 'rxjs';
 import { AuthService } from 'src/app/core/services/auth.service';
+import { HistoriaClinicaService } from 'src/app/core/services/historia-clinica.service';
 
 @Component({
   selector: 'app-turnos-list',
@@ -20,7 +21,7 @@ export class TurnosListComponent implements OnChanges {
   constructor(
     private datePipe: DatePipe,
     private firestore: FirestoreService,
-    private auth: AuthService
+    private auth: AuthService,
   ) {
     this.formBusqueda = new FormGroup({
       busqueda: new FormControl(null),
@@ -33,7 +34,7 @@ export class TurnosListComponent implements OnChanges {
     //Add 'implements OnInit' to the class.
     this.auth.getUserData().subscribe((data) => {
       this.usuarioLogeado = data;
-      console.log(this.usuarioLogeado);
+      // console.log(this.usuarioLogeado);
     });
   }
 
@@ -74,25 +75,59 @@ export class TurnosListComponent implements OnChanges {
 
   buscar() {
     if (this.terminoBusqueda) {
-      if (this.usuarioLogeado.rol != 'especialista') {
-        this.turnos = this.originalTurnos?.filter(
-          (t: any) =>
-            t.especialidad.toLowerCase().includes(this.terminoBusqueda.toLowerCase()) ||
-            t.especialistaDetalles.nombre.toLowerCase().includes(this.terminoBusqueda.toLowerCase())
-        );
-      } else if (this.usuarioLogeado.rol == 'especialista') {
-        this.turnos = this.originalTurnos?.filter(
-          (t: any) =>
-            t.pacienteDetalles.nombre.toLowerCase().includes(this.terminoBusqueda.toLowerCase()) ||
-            t.especialistaDetalles.nombre.toLowerCase().includes(this.terminoBusqueda.toLowerCase())
-        );
-      }
+      this.turnos = this.originalTurnos?.filter((t: any) => {
+        // Convert all values to lowercase for case-insensitive search
+        const searchTerm = this.terminoBusqueda.toLowerCase();
 
+        // Check if the search term is present in any column, including formatted date
+        return (
+          Object.values(t).some((value: any) => {
+            if (typeof value === 'string' || typeof value === 'number') {
+              // Convert both string and numeric values to lowercase for comparison
+              return value.toString().toLowerCase().includes(searchTerm);
+            } else if (typeof value === 'object' && value !== null) {
+              // Check nested objects (e.g., pacienteDetalles, especialistaDetalles)
+              return Object.values(value).some(
+                (nestedValue: any) =>
+                  (typeof nestedValue === 'string' || typeof nestedValue === 'number') &&
+                  nestedValue.toString().toLowerCase().includes(searchTerm)
+              );
+            } else {
+              return false;
+            }
+          }) ||
+          this.searchWithinHistoriaClinica(t.historiaClinica, searchTerm) || // Call the simplified function here
+          this.formatDateTime(t.fecha).toLowerCase().includes(searchTerm)
+        );
+      });
     } else {
       // Reset to the original array if the search term is empty
       this.turnos = [...this.originalTurnos];
     }
   }
+
+  searchWithinHistoriaClinica(historiaClinica: any, searchTerm: string): boolean {
+    console.log(historiaClinica);
+
+    if (!historiaClinica || typeof historiaClinica !== 'object') {
+      return false;
+    }
+
+    // Check if the search term is present in any property of the historiaClinica object
+    return Object.values(historiaClinica).some((nestedValue: any) => {
+      if (nestedValue && (typeof nestedValue === 'string' || typeof nestedValue === 'number')) {
+        return nestedValue.toString().toLowerCase().includes(searchTerm);
+      } else if (nestedValue && typeof nestedValue === 'object') {
+        // If the property is another object, recursively check it
+        return this.searchWithinHistoriaClinica(nestedValue, searchTerm);
+      } else {
+        return false;
+      }
+    });
+  }
+
+
+
 
   formatDateTime(timestamp: { seconds: number; nanoseconds: number }): string {
     const date = new Date(

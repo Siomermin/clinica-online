@@ -1,6 +1,6 @@
 <div class="mb-3">
-  <label *ngIf="this.usuarioLogeado.rol != 'especialista'" for="searchInput" class="form-label">Buscar por Especialidad o Especialista:</label>
-  <label *ngIf="this.usuarioLogeado.rol == 'especialista'" for="searchInput" class="form-label">Buscar por Especialidad o Paciente:</label>
+  <label *ngIf="this.usuarioLogeado?.rol != 'especialista'" for="searchInput" class="form-label">Buscar por Especialidad o Especialista:</label>
+  <label *ngIf="this.usuarioLogeado?.rol == 'especialista'" for="searchInput" class="form-label">Buscar por Especialidad o Paciente:</label>
 
   <input type="text" class="form-control" id="searchInput" [(ngModel)]="terminoBusqueda" placeholder="Ingrese término de búsqueda" (input)="buscar()">
 </div>

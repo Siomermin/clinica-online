@@ -123,7 +123,6 @@ export class AuthService {
         return this.getUserData().pipe(
           switchMap((userData) => {
             // Check if the email is verified
-            console.log(userData);
             if (userData) {
               if (userData!['test'] == 'f') {
                 if (!user?.emailVerified) {
@@ -159,7 +158,6 @@ export class AuthService {
       switchMap((user) => {
         if (user) {
           // User is authenticated, so you can use their UID
-          console.log(user.uid);
           return this.afs.get('usuarios').pipe(
             map((collection) => {
               const userDoc = collection.find((doc) => doc['uid'] === user.uid);
