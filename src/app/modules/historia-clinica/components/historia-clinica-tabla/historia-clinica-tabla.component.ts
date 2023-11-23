@@ -1,4 +1,4 @@
-import { Component, Input } from '@angular/core';
+import { Component } from '@angular/core';
 import { AuthService } from 'src/app/core/services/auth.service';
 import { HistoriaClinicaService } from 'src/app/core/services/historia-clinica.service';
 
@@ -43,5 +43,9 @@ export class HistoriaClinicaTablaComponent {
     })
 
 
+  }
+
+  descargar(historias: any) {
+    this.historiaService.generarPDF(historias);
   }
 }

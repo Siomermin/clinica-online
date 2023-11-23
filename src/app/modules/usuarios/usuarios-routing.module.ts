@@ -8,7 +8,9 @@ import { HistoriaClinicaComponent } from '../historia-clinica/components/histori
 
 const routes: Routes = [
   {
-    path: '', component: UsuariosComponent,
+    path: '',
+    component: UsuariosComponent,
+    data: { animation: 'isRight' }, // Add this line
     children: [
       {
         path: 'registro',
@@ -17,10 +19,12 @@ const routes: Routes = [
       {
         path: 'especialistas',
         component: ListaEspecialistasComponent,
+        data: { animation: 'isRight' }, // Adjust as needed
       },
       {
         path: 'pacientes',
         component: ListaPacientesComponent,
+        data: { animation: 'isRight' }, // Adjust as needed
         children: [
           {
             path: 'historia-clinica',
@@ -28,7 +32,6 @@ const routes: Routes = [
           },
         ]
       },
-
     ]
   }
 ];
@@ -37,4 +40,4 @@ const routes: Routes = [
   imports: [RouterModule.forChild(routes)],
   exports: [RouterModule]
 })
-export class UsuariosRoutingModule { }
+export class UsuariosRoutingModule {}

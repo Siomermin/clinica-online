@@ -4,7 +4,7 @@ import { MisTurnosComponent } from './pages/mis-turnos/mis-turnos.component';
 
 const routes: Routes = [
   {
-    path: '', component: MisTurnosComponent
+    path: '', component: MisTurnosComponent, data: { animation: 'isRight' }
   }
 ];
 

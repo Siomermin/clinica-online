@@ -2,14 +2,31 @@ import { Component } from '@angular/core';
 import { FirestoreService } from 'src/app/core/services/firestore.service';
 import { MatDialog } from '@angular/material/dialog';
 import { HistoriaClinicaComponent } from 'src/app/modules/historia-clinica/components/historia-clinica/historia-clinica.component';
+import { animate, state, style, transition, trigger } from '@angular/animations';
 
 @Component({
   selector: 'app-lista-pacientes',
   templateUrl: './lista-pacientes.component.html',
-  styleUrls: ['./lista-pacientes.component.scss']
+  styleUrls: ['./lista-pacientes.component.scss'],
+  animations: [
+    trigger('wideNarrow', [
+      state('wide', style({
+        width: '400px'
+      }
+      )),
+      state('narrow', style({
+        width: '200px'
+      }
+      )),
+      transition('wide => narrow', [animate('1s')]),
+      transition('narrow => wide', [animate('1s')]),
+    ])
+  ]
 })
 export class ListaPacientesComponent {
   pacientes: any;
+  isWide: boolean = false;
+
 
   constructor(private firestore: FirestoreService, public dialog: MatDialog) {}
 
@@ -27,6 +44,10 @@ export class ListaPacientesComponent {
         console.error('Error fetching documents: ', error);
       }
     );
+  }
+
+  toggleNormalAnimation() {
+    this.isWide = !this.isWide;
   }
 
   openHistoriaClinicaDialog(usuario: any): void {

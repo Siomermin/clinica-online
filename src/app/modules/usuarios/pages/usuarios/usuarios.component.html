@@ -1,5 +1,5 @@
 
-<div class="container-fluid">
+<div class="container-fluid" [@slider]="getRouterOutletState(outlet)">
   <div class="row">
     <nav class="nav nav-pills flex-column col-md-2 ms-2">
         <a class="card mt-4"  routerLinkActive="bg-primary text-light" routerLink="/usuarios/especialistas">
@@ -19,7 +19,7 @@
         </a>
     </nav>
     <div  class="col">
-      <router-outlet></router-outlet>
+      <router-outlet #outlet="outlet"></router-outlet>
     </div>
   </div>
 </div>

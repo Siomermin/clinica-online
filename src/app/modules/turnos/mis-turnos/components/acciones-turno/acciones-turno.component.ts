@@ -82,6 +82,7 @@ export class AccionesTurnoComponent {
             temperatura: this.temperatura,
             paciente: this.turnoCopia.paciente,
             especialista: this.turnoCopia.especialista,
+            especialidad: this.turnoCopia.especialidad
           };
 
           // Check if clave and valor are provided, then add them to historiaClinica

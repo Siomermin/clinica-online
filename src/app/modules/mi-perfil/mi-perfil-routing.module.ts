@@ -4,7 +4,8 @@ import { MiPerfilComponent } from './pages/mi-perfil/mi-perfil.component';
 
 const routes: Routes = [
   {
-    path: '', component: MiPerfilComponent
+    path: '', component: MiPerfilComponent, data: { animation: 'isRight' }, // Add this line
+
   }
 ];
 
