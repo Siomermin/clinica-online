@@ -19,7 +19,7 @@ const routes: Routes = [
       {
         path: 'especialistas',
         component: ListaEspecialistasComponent,
-        data: { animation: 'isRight' }, // Adjust as needed
+        data: { animation: 'isLeft' }, // Adjust as needed
       },
       {
         path: 'pacientes',

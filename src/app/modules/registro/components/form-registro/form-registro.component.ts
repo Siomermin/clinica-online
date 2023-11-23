@@ -26,8 +26,8 @@ export class FormRegistroComponent implements OnChanges {
   imagenBFile: any;
   formRegistro!: FormGroup;
   especialidades: string[] = ['Odontologia', 'Cirugía plástica', 'Psicologia'];
-  siteKey: string = '6LdzsREpAAAAANXJ_uYOzd8S4nhN0iM6f6V7D3pR'; // localhost
-  //  siteKey: string = '6LeFPhIpAAAAAFCkSZv4IVyQ_RSUF86_mBwreoSZ'; // clinica-online-587ae.web.app
+  //siteKey: string = '6LdzsREpAAAAANXJ_uYOzd8S4nhN0iM6f6V7D3pR'; // localhost
+    siteKey: string = '6LeFPhIpAAAAAFCkSZv4IVyQ_RSUF86_mBwreoSZ'; // clinica-online-587ae.web.app
 
 
   constructor(
