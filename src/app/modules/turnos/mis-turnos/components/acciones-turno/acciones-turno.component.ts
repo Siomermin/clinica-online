@@ -80,6 +80,7 @@ export class AccionesTurnoComponent {
             altura: this.altura,
             peso: this.peso,
             temperatura: this.temperatura,
+            presion: this.presion,
             paciente: this.turnoCopia.paciente,
             especialista: this.turnoCopia.especialista,
             especialidad: this.turnoCopia.especialidad

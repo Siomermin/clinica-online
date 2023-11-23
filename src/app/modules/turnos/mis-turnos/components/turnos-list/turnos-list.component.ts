@@ -21,7 +21,7 @@ export class TurnosListComponent implements OnChanges {
   constructor(
     private datePipe: DatePipe,
     private firestore: FirestoreService,
-    private auth: AuthService,
+    private auth: AuthService
   ) {
     this.formBusqueda = new FormGroup({
       busqueda: new FormControl(null),
@@ -46,6 +46,17 @@ export class TurnosListComponent implements OnChanges {
 
   private processTurnos(turnos: any): void {
     this.originalTurnos = [...turnos]; // Make a copy of the original array
+
+    // ...
+
+    // Sort the turnos array by fecha
+    turnos.sort((a: any, b: any) => {
+      const fechaA = a.fecha.seconds * 1000 + a.fecha.nanoseconds / 1e6;
+      const fechaB = b.fecha.seconds * 1000 + b.fecha.nanoseconds / 1e6;
+      return fechaA - fechaB;
+    });
+
+    // ...
 
     turnos.forEach((turno: any) => {
       const pacienteEmail = turno.paciente;
@@ -89,7 +100,8 @@ export class TurnosListComponent implements OnChanges {
               // Check nested objects (e.g., pacienteDetalles, especialistaDetalles)
               return Object.values(value).some(
                 (nestedValue: any) =>
-                  (typeof nestedValue === 'string' || typeof nestedValue === 'number') &&
+                  (typeof nestedValue === 'string' ||
+                    typeof nestedValue === 'number') &&
                   nestedValue.toString().toLowerCase().includes(searchTerm)
               );
             } else {
@@ -106,7 +118,10 @@ export class TurnosListComponent implements OnChanges {
     }
   }
 
-  searchWithinHistoriaClinica(historiaClinica: any, searchTerm: string): boolean {
+  searchWithinHistoriaClinica(
+    historiaClinica: any,
+    searchTerm: string
+  ): boolean {
     console.log(historiaClinica);
 
     if (!historiaClinica || typeof historiaClinica !== 'object') {
@@ -115,7 +130,10 @@ export class TurnosListComponent implements OnChanges {
 
     // Check if the search term is present in any property of the historiaClinica object
     return Object.values(historiaClinica).some((nestedValue: any) => {
-      if (nestedValue && (typeof nestedValue === 'string' || typeof nestedValue === 'number')) {
+      if (
+        nestedValue &&
+        (typeof nestedValue === 'string' || typeof nestedValue === 'number')
+      ) {
         return nestedValue.toString().toLowerCase().includes(searchTerm);
       } else if (nestedValue && typeof nestedValue === 'object') {
         // If the property is another object, recursively check it
@@ -125,9 +143,6 @@ export class TurnosListComponent implements OnChanges {
       }
     });
   }
-
-
-
 
   formatDateTime(timestamp: { seconds: number; nanoseconds: number }): string {
     const date = new Date(
