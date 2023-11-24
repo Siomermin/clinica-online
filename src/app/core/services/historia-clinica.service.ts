@@ -68,10 +68,10 @@ export class HistoriaClinicaService {
       const content: any[] = [
         {
           columns: [
-            { image: imgDataURL, width: 70, margin: [0, 10, 10, 0] }, // Added margin for the image
+            { image: imgDataURL, width: 70, margin: [0, 10, 10, 0] },
             {
               stack: [
-                { text: 'Historia Clínica', style: 'header', margin: [0, 10, 0, 20] }, // Add the title here with margin
+                { text: 'Historia Clínica', style: 'header', margin: [0, 10, 0, 20] },
                 `Fecha de emisión: ${new Date().toLocaleDateString('es-AR', {
                   dateStyle: 'full',
                 })}`,
