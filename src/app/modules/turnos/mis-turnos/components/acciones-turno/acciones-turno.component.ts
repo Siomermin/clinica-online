@@ -2,6 +2,9 @@ import { Component, Input } from '@angular/core';
 import { TurnoService } from '../../../../../core/services/turno.service';
 import Swal from 'sweetalert2';
 import { HistoriaClinicaService } from 'src/app/core/services/historia-clinica.service';
+import { Router } from '@angular/router';
+import { MatDialog, MatDialogConfig } from '@angular/material/dialog';
+import { FormHistoriaClinicaComponent } from '../../../../historia-clinica/components/form-historia-clinica/form-historia-clinica.component';
 
 @Component({
   selector: 'app-acciones-turno',
@@ -19,124 +22,81 @@ export class AccionesTurnoComponent {
   clave: string = '';
   valor: number = 0;
   turnoCopia: any;
+  datos: any[] = [];
+  showHistoriaClinicaForm: boolean = false;
 
-  constructor(private turnoService: TurnoService, private historiaService: HistoriaClinicaService) {}
+  constructor(
+    private turnoService: TurnoService,
+    private historiaService: HistoriaClinicaService,
+    private router: Router,
+    public dialog: MatDialog
+  ) {}
 
   ngOnInit(): void {
     this.turnoCopia = this.turno;
   }
 
+  agregarDato() {
+    this.datos.push({ clave: '', valor: 0 });
+  }
+
+  openHistoriaClinicaModal() {
+    const dialogConfig = new MatDialogConfig();
+    // Allow closing on navigation (e.g., clicking outside the modal)
+    dialogConfig.closeOnNavigation = true;
+
+    // Allow closing on navigation (e.g., clicking outside the modal)
+    dialogConfig.closeOnNavigation = true;
+
+    const dialogRef = this.dialog.open(
+      FormHistoriaClinicaComponent,
+      dialogConfig
+    );
+
+    dialogRef.componentInstance.turno = this.turnoCopia; // Pass the turno object to the modal component
+
+
+    dialogRef.afterClosed().subscribe((result) => {
+      // Handle modal close if needed
+    });
+  }
   // Modify the cambiarEstadoTurno method to handle 'Finalizado' state
   cambiarEstadoTurno(estado: string): void {
-    if (estado === 'Finalizado') {
-      // Show the form for additional data
+    let titulo = '';
+
+    if (estado != 'Aceptado') {
+      if (estado == 'Finalizado') {
+        titulo = 'Cual fue el diagnostico del paciente?';
+      } else if (estado == 'Cancelado') {
+        titulo = 'Porque que cancela su turno?';
+      } else if (estado == 'Rechazado') {
+        titulo = 'Porque que rechaza su turno?';
+      }
       Swal.fire({
-        title: 'Completar historia clinica:',
-        html: `
-             <div>
-              <label for="altura">Altura:</label>
-              <input type="number" id="altura" [(ngModel)]="altura" class="swal2-input">
-             <div>
-             <div>
-              <label for="peso">Peso:</label>
-              <input type="number" id="peso" [(ngModel)]="peso" class="swal2-input">
-             </div>
-             <div>
-              <label for="temperatura">Temperatura:</label>
-              <input type="number" id="temperatura" [(ngModel)]="temperatura" class="swal2-input">
-             </div>
-             <div>
-              <label for="presion">Presión:</label>
-              <input type="number" id="presion" [(ngModel)]="presion" class="swal2-input">
-             </div>
-             <div>
-             <label>Dato dinamico:</label>
-             </div>
-             <div>
-             <label for="clave">Clave:</label>
-             <input type="text" id="clave" [(ngModel)]="clave" class="swal2-input">
-           </div>
-           <div>
-             <label for="valor">Valor:</label>
-             <input type="number" id="valor" [(ngModel)]="valor" class="swal2-input">
-           </div>
-           `,
+        title: titulo,
+        text: 'Escriba abajo:',
+        input: 'text',
         showCancelButton: true,
-        preConfirm: async () => {
-          // Use async/await to wait for user input
-
-          // Update the values before capturing them
-          this.altura = parseFloat((document.getElementById('altura') as HTMLInputElement).value);
-          this.peso = parseFloat((document.getElementById('peso') as HTMLInputElement).value);
-          this.temperatura = parseFloat((document.getElementById('temperatura') as HTMLInputElement).value);
-          this.presion = parseFloat((document.getElementById('presion') as HTMLInputElement).value);
-          this.clave = (document.getElementById('clave') as HTMLInputElement).value;
-          this.valor = parseFloat((document.getElementById('valor') as HTMLInputElement).value);
-
-
-          // Handle the form data
-          // Update the turno with the additional data
-          const historiaClinica: any = {
-            altura: this.altura,
-            peso: this.peso,
-            temperatura: this.temperatura,
-            presion: this.presion,
-            paciente: this.turnoCopia.paciente,
-            especialista: this.turnoCopia.especialista,
-            especialidad: this.turnoCopia.especialidad
-          };
-
-          // Check if clave and valor are provided, then add them to historiaClinica
-          if (this.clave && this.valor !== undefined) {
-            historiaClinica[this.clave] = this.valor;
-          }
-
-          const result = await Swal.fire({
-            title: 'Cual fue el diagnostico del paciente?',
-            text: 'Escriba abajo:',
-            input: 'text',
-            showCancelButton: true,
-          });
-
-          if (result.value) {
-
-            this.turnoCopia.resenia = result.value;
-            this.turnoCopia.estado = estado;
-            this.turnoCopia.historiaClinica = [historiaClinica];
-            this.turnoService.updateTurno(this.turnoCopia);
-            this.historiaService.setHistoriaClinica(historiaClinica);
-          }
-        },
+      }).then((result) => {
+        if (result.value) {
+          this.turnoCopia.resenia = result.value;
+          this.turnoCopia.estado = estado;
+          this.turnoService.updateTurno(this.turnoCopia);
+        }
       });
     } else {
-      if (estado != 'Aceptado') {
-        let titulo = '';
-        if (estado == 'Cancelado') {
-          titulo = 'Porque que cancela su turno?';
-        } else if (estado == 'Rechazado') {
-          titulo = 'Porque que rechaza su turno?';
-        }
-        Swal.fire({
-          title: titulo,
-          text: 'Escriba abajo:',
-          input: 'text',
-          showCancelButton: true,
-        }).then((result) => {
-          if (result.value) {
-
-            this.turnoCopia.resenia = result.value;
-            this.turnoCopia.estado = estado;
-            this.turnoService.updateTurno(this.turnoCopia);
-          }
-        });
-      } else {
-        this.turnoCopia.estado = estado;
-        this.turnoService.updateTurno(this.turnoCopia);
-      }
+      this.turnoCopia.estado = estado;
+      this.turnoService.updateTurno(this.turnoCopia);
     }
   }
 
-  verResenia() {
+  verAtencion() {
+    if (this.turno.atencion) {
+      Swal.fire(this.turno.atencion);
+    }
+  }
+
+  verDiagnostico() {
     if (this.turno.resenia) {
       Swal.fire(this.turno.resenia);
     }
@@ -150,10 +110,13 @@ export class AccionesTurnoComponent {
       showCancelButton: true,
     }).then((result) => {
       if (result.value) {
-
         this.turnoCopia.atencion = result.value;
         this.turnoService.updateTurno(this.turnoCopia);
       }
     });
+  }
+
+  navigateTo(path: string) {
+    this.router.navigateByUrl(path);
   }
 }

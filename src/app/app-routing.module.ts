@@ -47,6 +47,10 @@ const routes: Routes = [
   },
   {
     path: 'pacientes',
+    loadChildren: () => import('./modules/pacientes/pacientes.module').then(m => m.PacientesModule),
+  },
+  {
+    path: 'historia-clinica',
     loadChildren: () => import('./modules/historia-clinica/historia-clinica.module').then(m => m.HistoriaClinicaModule),
   },
 ];

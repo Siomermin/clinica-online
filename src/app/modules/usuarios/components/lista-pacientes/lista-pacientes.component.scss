@@ -1,11 +1,7 @@
-/* historia-clinica.component.scss */
-:host {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  height: 100%;
+.usuario-container {
+  max-width: 320px;
 }
 
-.text-center {
-  width: 80%; /* Adjust the width as needed */
+.card-link {
+  cursor: pointer;
 }

@@ -1,17 +1,18 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
-import { HistoriaClinicaTablaComponent } from './components/historia-clinica-tabla/historia-clinica-tabla.component';
+import { FormHistoriaClinicaComponent } from './components/form-historia-clinica/form-historia-clinica.component';
 
 const routes: Routes = [
   {
-    path: '', component: HistoriaClinicaTablaComponent,
+    path: '',
+    component: FormHistoriaClinicaComponent
   },
 ];
 
 @NgModule({
   imports: [RouterModule.forChild(routes)],
-  exports: [RouterModule]
+  exports: [RouterModule],
 })
-export class HistoriaClinicaRoutingModule { }
+export class HistoriaClinicaRoutingModule {}
 
 // Export the routes directly

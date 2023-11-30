@@ -71,7 +71,11 @@ export class HistoriaClinicaService {
             { image: imgDataURL, width: 70, margin: [0, 10, 10, 0] },
             {
               stack: [
-                { text: 'Historia Clínica', style: 'header', margin: [0, 10, 0, 20] },
+                {
+                  text: 'Historia Clínica',
+                  style: 'header',
+                  margin: [0, 10, 0, 20],
+                },
                 `Fecha de emisión: ${new Date().toLocaleDateString('es-AR', {
                   dateStyle: 'full',
                 })}`,
@@ -97,9 +101,17 @@ export class HistoriaClinicaService {
           },
         };
 
-        content.push(tabla);
+       // Add 'adicionales' to the body of the table
+       if (historia.adicionales && historia.adicionales.length > 0) {
+        for (let adicional of historia.adicionales) {
+          // Capitalize the first letter of adicional.key
+          const capitalizedKey = adicional.key.charAt(0).toUpperCase() + adicional.key.slice(1);
+          tabla.table.body.push([capitalizedKey, adicional.value]);
+        }
       }
 
+        content.push(tabla);
+      }
 
       const doc = { content: content };
       pdfMake.createPdf(doc).open();
@@ -119,8 +131,4 @@ export class HistoriaClinicaService {
       reader.readAsDataURL(blob);
     });
   }
-
-
-
-
 }

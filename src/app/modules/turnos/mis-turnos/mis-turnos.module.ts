@@ -7,6 +7,8 @@ import { MisTurnosComponent } from './pages/mis-turnos/mis-turnos.component';
 import { TurnosListComponent } from './components/turnos-list/turnos-list.component';
 import { AccionesTurnoComponent } from './components/acciones-turno/acciones-turno.component';
 import { FormsModule } from '@angular/forms';
+import { HistoriaClinicaModule } from '../../historia-clinica/historia-clinica.module';
+import { MatDialogModule } from '@angular/material/dialog';
 
 
 @NgModule({
@@ -18,7 +20,9 @@ import { FormsModule } from '@angular/forms';
   imports: [
     CommonModule,
     MisTurnosRoutingModule,
-    FormsModule
+    FormsModule,
+    HistoriaClinicaModule,
+    MatDialogModule
   ],
   providers: [DatePipe],
 })

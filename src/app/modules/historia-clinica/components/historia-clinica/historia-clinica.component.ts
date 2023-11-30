@@ -10,6 +10,8 @@ import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 export class HistoriaClinicaComponent {
   @Input() usuarioLogeado: any;
   historiaClinica: any;
+  currentHistoria: any;
+  currentIndex = 0;
 
   constructor(
     private historiaService: HistoriaClinicaService,
@@ -26,8 +28,22 @@ export class HistoriaClinicaComponent {
       .getHistoriaPorPaciente(this.usuarioLogeado.email)
       .subscribe((data) => {
         this.historiaClinica = data;
-        console.log(this.historiaClinica);
+        this.currentHistoria = this.historiaClinica[0]; // Initialize with the first historia
       });
+  }
+
+  nextHistory() {
+    if (this.currentIndex < this.historiaClinica.length - 1) {
+      this.currentIndex++;
+      this.currentHistoria = this.historiaClinica[this.currentIndex];
+    }
+  }
+
+  prevHistory() {
+    if (this.currentIndex > 0) {
+      this.currentIndex--;
+      this.currentHistoria = this.historiaClinica[this.currentIndex];
+    }
   }
 
   // Function to close the dialog

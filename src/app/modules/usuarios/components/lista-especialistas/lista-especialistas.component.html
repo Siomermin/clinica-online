@@ -1,36 +1,51 @@
-<table class="table align-middle mb-0 mt-3 bg-white">
-  <thead class="bg-light">
-    <tr>
-      <th>Nombre</th>
-      <th>Correo Electronico</th>
-      <th>Especialidad</th>
-      <th>Habilitar</th>
-    </tr>
-  </thead>
-  <tbody>
-    <tr *ngFor="let usuario of especialistas">
-      <td>
-        <div class="d-flex align-items-center">
-          <img [src]="usuario.imagen_a_url" alt="" style="width: 45px; height: 45px" class="rounded-circle" />
-          <div class="ms-3">
-            <p class="fw-bold mb-1">{{ usuario.nombre }} {{ usuario.apellido }}</p>
-          </div>
-        </div>
-      </td>
-      <td>
-        <p class="fw-normal mb-1">{{ usuario.email }}</p>
-      </td>
-      <td>
-        <p>{{ usuario.especialidad }}</p>
-      <td>
-        <button (click)="actualizarVerificado(usuario)" type="button"
-          class="btn btn-link btn-sm btn-rounded">
+<!-- <div class="row mt-3 ms-3">
+  <div class="col-md-4 especialista-container" *ngFor="let usuario of especialistas">
+    <div class="card mb-3" style="width: 18rem;">
+      <img [src]="usuario.imagen_a_url" alt="" class="card-img-top" style="width: 100%; height: 200px; object-fit: fill;">
+      <div class="card-body">
+        <div class="titulo">
+          <h5 class="card-title fw-bold">{{ usuario.nombre }} </h5>
           <div class="form-check form-switch">
             <input mdbCheckbox class="form-check-input" type="checkbox" id="flexSwitchCheckDefault"
-              [checked]="usuario.verificado == 't'" />
+              [checked]="usuario.verificado == 't'" (change)="actualizarVerificado(usuario)" />
+            <label class="form-check-label" for="flexSwitchCheckDefault">Habilitar</label>
           </div>
-        </button>
-      </td>
-    </tr>
-  </tbody>
-</table>
+        </div>
+
+        <p class="card-text">{{ usuario.email }}</p>
+        <p class="card-text">{{ usuario.especialidad }}</p>
+      </div>
+      <div class="card-body">
+        <button class="btn btn-success" (click)="descargarExcelTurnos(usuario.email)">Excel turnos</button>
+      </div>
+    </div>
+  </div>
+</div> -->
+<div class="row mt-3 ms-3">
+  <div class="col-md-4 especialista-container" *ngFor="let usuario of especialistas">
+    <div class="card mb-3" style="width: 18rem;">
+      <img [src]="usuario.imagen_a_url" alt="" class="card-img-top" style="width: 100%; height: 200px; object-fit: fill;">
+      <div class="card-body">
+        <h5 class="card-title fw-bold">{{ usuario.nombre }} {{ usuario.apellido }}</h5>
+        <p class="card-text">{{ usuario.email }}</p>
+      </div>
+      <ul class="list-group list-group-flush">
+        <li class="list-group-item">{{ usuario.especialidad }}</li>
+      </ul>
+      <div class="card-body">
+        <div class="d-flex justify-content-between align-items-center">
+          <div>
+            <div class="form-check form-switch">
+              <input mdbCheckbox class="form-check-input" type="checkbox" id="flexSwitchCheckDefault"
+                [checked]="usuario.verificado == 't'" (change)="actualizarVerificado(usuario)" />
+              <label class="form-check-label" for="flexSwitchCheckDefault">Habilitar</label>
+            </div>
+          </div>
+          <div>
+            <a class="card-link text-success  fw-bold" (click)="descargarExcelTurnos(usuario.email)">Excel turnos</a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
