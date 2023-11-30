@@ -17,9 +17,9 @@
         class="list-group-item d-flex justify-content-between align-items-center"
       >
         <div>
-          <div class="fw-bold">Nombre y apellido</div>
+          <div class="fw-bold">Apellido y nombre</div>
           <div class="text-muted">
-            {{ usuarioLogeado?.nombre }} {{ usuarioLogeado?.apellido }}
+            {{ usuarioLogeado?.nombre | formatNombreApellido: usuarioLogeado?.apellido }}
           </div>
         </div>
       </li>

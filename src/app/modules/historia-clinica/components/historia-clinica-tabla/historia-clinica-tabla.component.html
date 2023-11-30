@@ -13,7 +13,7 @@
       <div *ngFor="let item of currentHistoria | keyvalue">
         <div *ngIf="item.key !== 'id'">
           <div *ngIf="item.key !== 'adicionales'">
-            <span class="fw-bold">{{ item.key }}:</span> {{ item.value }}
+            <span class="fw-bold">{{ item.key }}:</span>  {{ item.value | formatearMedidas: item.key }}
           </div>
         </div>
       </div>
