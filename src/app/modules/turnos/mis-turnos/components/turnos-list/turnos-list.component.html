@@ -55,7 +55,8 @@
           <span class="d-inline">{{ turno.especialidad }}</span>
         </h5>
       </td>
-      <td>{{ formatDateTime(turno.fecha) }}</td>
+      <!-- <td>{{ formatDateTime(turno.fecha) }}</td> -->
+      <td> {{ turno.fecha | formatTimestamp }}</td>
       <td>
         <h5 [ngSwitch]="turno.estado">
           <span *ngSwitchCase="'Solicitado'" class="d-inline text-primary">{{

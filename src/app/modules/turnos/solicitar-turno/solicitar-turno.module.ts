@@ -7,6 +7,7 @@ import { ListaEspecialistasTurnoComponent } from './components/lista-especialist
 import { ListaHorariosTurnoComponent } from './components/lista-horarios-turno/lista-horarios-turno.component';
 import { ListaEspecialidadesComponent } from './components/lista-especialidades/lista-especialidades.component';
 import { ListaPacientesComponent } from './components/lista-pacientes/lista-pacientes.component';
+import { SeleccionarImagenDirective } from '../../../core/directives/seleccionar-imagen.directive';
 
 
 @NgModule({
@@ -15,7 +16,8 @@ import { ListaPacientesComponent } from './components/lista-pacientes/lista-paci
     ListaEspecialistasTurnoComponent,
     ListaHorariosTurnoComponent,
     ListaEspecialidadesComponent,
-    ListaPacientesComponent
+    ListaPacientesComponent,
+    SeleccionarImagenDirective
   ],
   imports: [
     CommonModule,

@@ -9,13 +9,15 @@ import { AccionesTurnoComponent } from './components/acciones-turno/acciones-tur
 import { FormsModule } from '@angular/forms';
 import { HistoriaClinicaModule } from '../../historia-clinica/historia-clinica.module';
 import { MatDialogModule } from '@angular/material/dialog';
+import { FormatTimestampPipe } from 'src/app/core/pipes/format-date-time.pipe';
 
 
 @NgModule({
   declarations: [
     MisTurnosComponent,
     TurnosListComponent,
-    AccionesTurnoComponent
+    AccionesTurnoComponent,
+    FormatTimestampPipe
   ],
   imports: [
     CommonModule,

@@ -5,9 +5,10 @@ import { HistoriaClinicaTablaComponent } from './components/historia-clinica-tab
 import { HistoriaClinicaRoutingModule } from './historia-clinica-routing.module';
 import { FormHistoriaClinicaComponent } from './components/form-historia-clinica/form-historia-clinica.component';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { FormatearMedidasPipe } from 'src/app/core/pipes/formatear-medidas.pipe';
 
 @NgModule({
-  declarations: [HistoriaClinicaComponent, HistoriaClinicaTablaComponent, FormHistoriaClinicaComponent],
+  declarations: [HistoriaClinicaComponent, HistoriaClinicaTablaComponent, FormHistoriaClinicaComponent, FormatearMedidasPipe     ],
   imports: [CommonModule, FormsModule, ReactiveFormsModule],
   exports: [HistoriaClinicaRoutingModule, HistoriaClinicaComponent, HistoriaClinicaTablaComponent, FormHistoriaClinicaComponent],
 })
